@@ -1,0 +1,106 @@
+\documentclass[aspectratio=169]{beamer}
+
+%
+% Choose how your presentation looks.
+%
+% For more themes, color themes and font themes, see:
+% http://deic.uab.es/~iblanes/beamer_gallery/index_by_theme.html
+%
+\mode<presentation>
+{
+  \usetheme{default}      % or try Darmstadt, Madrid, Warsaw, ...
+  \usecolortheme{default} % or try albatross, beaver, crane, ...
+  \usefonttheme{default}  % or try serif, structurebold, ...
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{caption}[numbered]
+}
+
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+
+\title[Your Short Title]{Schere-Stein-Papier}
+\author{René Appel, Michael Landauer, Katharina Riemer, Martin Rupp, Christian Stippel}
+\institute{Einführung in die digitale Bildverarbeitung 2018W}
+\date{09.01.2019}
+
+\begin{document}
+
+% Seite 1
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% Seite 3
+\begin{frame}{Finale Pipeline}
+\begin{figure}
+    \centering
+    \includegraphics[width=1.0\textheight]{img/pipeline.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Bilderstrecke Pipeline}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.27\textwidth]{img/input.png}
+    %\includegraphics[width=0.27\textwidth]{img/Closing.png}
+    \includegraphics[width=0.27\textwidth]{img/rightHand.png}
+    \includegraphics[width=0.27\textwidth]{img/rightDistance.png}
+
+    \includegraphics[width=0.27\textwidth]{img/rightSkelet.png}
+    \includegraphics[width=0.27\textwidth]{_Bericht/img/graph.png}
+    \includegraphics[width=0.27\textwidth]{img/output.png}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Video}
+ \begin{figure}
+    \centering
+    \includegraphics[width=0.27\textwidth]{_EndPresentation/img/bsp(1).JPG}
+    \includegraphics[width=0.27\textwidth]{_EndPresentation/img/bsp(2).JPG}
+    \includegraphics[width=0.27\textwidth]{_EndPresentation/img/bsp(3).JPG}
+
+    \includegraphics[width=0.27\textwidth]{_EndPresentation/img/bsp(4).JPG}
+    \includegraphics[width=0.27\textwidth]{_EndPresentation/img/bsp(5).JPG}
+    \includegraphics[width=0.27\textwidth]{_EndPresentation/img/bsp(6).JPG}
+\end{figure}
+\end{frame}
+
+% Seite 4
+\begin{frame}{Statistik} % TODO
+\begin{figure}
+    \centering
+    \includegraphics[width=0.49\textwidth]{_Bericht/img/SuccessRate.png}
+    \includegraphics[width=0.49\textwidth]{_Bericht/img/SuccessAndFailure.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Statistik} % TODO
+\begin{figure}
+    \centering
+    \includegraphics[width=1.0\textwidth]{_EndPresentation/img/fail.png}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Probleme und mögliche Verbesserungen}
+\begin{minipage}{0.45\textwidth}
+\begin{itemize}
+    \item Handerkennung
+    \item Konvexität
+    \item Erkennung mit Graph
+\end{itemize}
+\end{minipage} \begin{minipage}{0.5\textwidth}
+    \includegraphics[width=1\textwidth]{_EndPresentation/img/scissor_error.JPG}
+\end{minipage}
+
+
+\end{frame}
+
+
+ \begin{frame}{}
+     \centering
+     \huge Danke für Eure Aufmerksamkeit!
+ \end{frame}
+
+\end{document}
