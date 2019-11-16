@@ -76,6 +76,20 @@ decision_tree_comparison(train_data, target, options,
 plt.show()
 plt.savefig(path + "tree_comparision.png")
 
+#%% knn comparision
+
+x_train, y_train, x_test, y_test = create_cross_validation(train_data,'EPR')
+find_best_rmse('with all attributes and manhatten',
+               x_train, y_train, x_test, y_test,metric='manhattan')
+
+x_train, y_train, x_test, y_test = create_cross_validation(train_data,'EPR')
+find_best_rmse('with all attributes and euclidean',x_train, y_train, x_test, y_test)
+
+x_train, y_train, x_test, y_test = create_cross_validation(train_data,'EPR')
+find_best_rmse('with all attributes and mahalanobis',x_train, y_train, x_test, y_test)
+
+plt.show()
+
 # %% Outlier removal and normed
 train_data_out = train_data[(np.abs(stats.zscore(train_data))<3).all(axis=1)]
 train_data_out.index = np.arange(0,len(train_data_out),1)
@@ -115,6 +129,24 @@ decision_tree_comparison(train_data_out, target, options,
 
 plt.show()
 plt.savefig(path + "tree_comparision_outlier.png")
+#%% knn comparision
+x_train, y_train, x_test, y_test = create_cross_validation(train_data_out,'EPR')
+find_best_rmse('with all attributes and manhatten',
+               x_train, y_train, x_test, y_test,metric='manhattan')
+
+x_train, y_train, x_test, y_test = create_cross_validation(train_data_out,'EPR')
+find_best_rmse('with all attributes and mahalanobis',x_train, y_train, x_test, y_test)
+
+selection = ["MMIN", "MMAX", "CACH","EPR"]
+
+x_train, y_train, x_test, y_test = create_cross_validation(train_data_out[selection],'EPR')
+find_best_rmse('with top 3 attributes and manhatten',
+               x_train, y_train, x_test, y_test,metric='manhattan')
+
+x_train, y_train, x_test, y_test = create_cross_validation(train_data_out[selection],'EPR')
+find_best_rmse('with top 3 attributes and mahalanobis',x_train, y_train, x_test, y_test)
+
+plt.show()
 
 
 

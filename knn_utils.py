@@ -92,12 +92,12 @@ def find_best_rmse(name,x_train, y_train, x_test, y_test, k_max=23, metric='mink
             print('RMSE value for k=', k, 'is:', rsme)
 
     if plot:
-        t = np.arange(1, k_max - 1)
-        plt.plot(t, rmse_val[1:k_max - 1], '--', label=name)
+        t = range(1, k_max)
+        plt.plot(t, rmse_val[0:k_max-1], '--', label=name)
         plt.xticks(t)
         plt.xlabel('# neighbours (k)')
         plt.ylabel('rsme')
-        plt.scatter(best_k-1, best_rmse)
+        plt.scatter(best_k, best_rmse)
         plt.legend()
     return best_rmse,best_k
 
