@@ -29,7 +29,18 @@
 \date{18.11.2019}
 
 \begin{document}
-% Seite 1
+
+\AtBeginSection[]{
+  \begin{frame}
+  \vfill
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+    \usebeamerfont{title}\insertsectionhead\par
+  \end{beamercolorbox}
+  \vfill
+  \end{frame}
+}
+
 \begin{frame}
   \titlepage
 \end{frame}
@@ -40,7 +51,28 @@
 \end{frame}
 
 \section{Regression Techniques}
-\subsection{Linear Regression}
+\subsection{Ridge Regression}
+
+\begin{frame}
+\frametitle{Ridge Regression}
+\begin{itemize}
+\item 
+\end{itemize}
+\end{frame}
+
+\subsection{K-Nearest Neighbors Regression}
+\subsection{Decision Tree Regression}
+\subsection{Bayesian Linear Regression}
+
+\section{Performance Metrics}
+
+\begin{frame}
+\frametitle{Metrics}
+\begin{itemize}
+\item Root Mean Squared Error
+\item 
+\end{itemize}
+\end{frame}
 
 \section{Bike Sharing}
 
@@ -49,6 +81,7 @@
 \begin{itemize}
 \item No missing values
 \item Weather attributes are normalized
+\item 
 \end{itemize}
 \end{frame}
 
@@ -64,6 +97,18 @@
 \section{Online News Popularity}
 
 \section{CPU Performance}
+
+\begin{frame}{}
+\frametitle{Characteristics}
+Interesting topic for computer science students. Very different to other data sets.
+\begin{itemize}
+\item No missing values
+\item Target value is estimated relative performance
+\item Nominal values e.g. vendor, model
+\item Rational values e.g. cycle time, cache, performance
+\item Not normalized
+\end{itemize}
+\end{frame}
 
 
 

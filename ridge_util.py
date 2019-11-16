@@ -37,7 +37,7 @@ def ridgeRegression(train, test, alphaFrom, alphaTo, step, attr, target, groundT
     return best_rmse, best_alpha
 '''
 
-def ridge_regression(train_data, test_data, x_attributes, y_target, alpha):
+def ridge_regression(train_data, test_data, x_attributes, y_target, alpha=1):
     train_x = train_data[x_attributes]
     train_y = train_data[y_target]
 
@@ -51,7 +51,7 @@ def ridge_regression(train_data, test_data, x_attributes, y_target, alpha):
 
     return rmse
 
-def ridge_regression_crossvalidation(train, target, attr, alpha, splits=10):
+def ridge_regression_crossvalidation(train, target, attr, alpha=1, splits=10):
     kf = KFold(n_splits=splits)
     kf.get_n_splits(train) # returns the number of splitting iterations in the cross-validatorprint(kf) KFold(n_splits=10, random_state=None, shuffle=False)
 
@@ -93,8 +93,8 @@ def ridge_regression_alpha_comparison(train, target, attr, alpha_from, alpha_to,
         t = np.arange(0, len(mrmse_val))
         plt.plot(t * step, mrmse_val[0:len(mrmse_val)] , '--', label=name)
         plt.xticks(t * step)
-        plt.xlabel('alpha')
-        plt.ylabel('rsme')
+        plt.xlabel('Alpha')
+        plt.ylabel('Root Mean Squared Error')
         plt.scatter(best_alpha, best_mrmse)
         plt.legend()
 
