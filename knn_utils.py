@@ -9,6 +9,7 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import GridSearchCV
 
+
 def find_best_k(x_train, y_train, ks):
     """ Grid search, for efficient searching for k """
     params = {'n_neighbors':ks}
@@ -76,9 +77,9 @@ def find_best_rmse(name,x_train, y_train, x_test, y_test, k_max=23, metric='mink
     rmse_val = [] # to store rmse values for different k
     for k in range(1, k_max):
         model = neighbors.KNeighborsRegressor(n_neighbors = k,metric=metric)
-        model.fit(x_train, y_train)  #fit the model
-        pred=model.predict(x_test) #make prediction on test set
-        rsme = sqrt(mean_squared_error(y_test, pred)) #calculate rmse
+        model.fit(x_train, y_train)  # fit the model
+        pred=model.predict(x_test) # make prediction on test set
+        rsme = sqrt(mean_squared_error(y_test, pred)) # calculate rmse
 
         if k == 1:
             best_rmse=rsme
