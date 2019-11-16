@@ -3,6 +3,7 @@ import seaborn as sns
 import numpy as np
 from ridge_util import *
 from knn_utils import *
+from tree_util import *
 from sklearn.metrics import mean_squared_error
 from matplotlib import pyplot
 from sklearn import linear_model
@@ -27,6 +28,10 @@ test = test.drop(['dteday', 'yr', 'id'], axis=1)
 
 category_features = ['season', 'holiday', 'mnth', 'hr', 'weekday', 'workingday', 'weathersit']
 number_features = ['temp', 'atemp', 'hum', 'windspeed']
+top4_attributes = ["hum", "hr", "temp", "season"]
+all_attributes_tupels_list = [[number_features, 'Numeric attributes'], [number_features + category_features, 'Number + category'], [top4_attributes, 'Top 4 attributes']]
+
+
 target = ['cnt']
 
 fig, ax = pyplot.subplots(figsize=(10, 10))
@@ -61,26 +66,43 @@ plt.show()
 '''
 
 # %% Bike Sharing Ridge regression Alpha comparison with Cross validation and different attributes
-ridge_regression_alpha_comparison(train,
-                                  0,
-                                  100,
-                                  10,
-                                  target,
-                                  number_features+category_features,
-                                  "All attributes")
-ridge_regression_alpha_comparison(train,
-                                  0,
-                                  100,
-                                  10,
-                                  target,
+ridge_regression_alpha_comparison(train, target,
+                                  number_features + category_features,
+                                  0, 100, 10, "All attributes")
+ridge_regression_alpha_comparison(train, target,
                                   number_features,
-                                  "Only Numerical values")
+                                  0, 100, 10, "Only Numerical values")
 
-ridge_regression_alpha_comparison(train,
-                                  0,
-                                  100,
-                                  10,
-                                  target,
-                                  ["hum","hr","temp","season"],
+ridge_regression_alpha_comparison(train, target,
+                                  ["hum", "hr", "temp", "season"],
+                                  0, 100, 10,
                                   "Maximum correlating values")
 plt.show()
+
+#%% Bike sharing decision tree regression criterion comparison
+
+decision_tree_regression_criterion_comparison(train,target,
+                                              number_features + category_features,
+                                              criterion = ['mse', 'friedman_mse'],
+                                              name = "Number features + category features")
+
+decision_tree_regression_criterion_comparison(train, target,
+                                              number_features,
+                                              criterion=['mse', 'friedman_mse'],
+                                              name = "Number features")
+
+decision_tree_regression_criterion_comparison(train, target,
+                                              ["hum", "hr", "temp", "season"],
+                                              criterion=['mse', 'friedman_mse'],
+                                              name = "Top 4")
+plt.show()
+
+#%% Bike sharing decision tree regression max_depth comparison
+decision_tree_comparison(train, target,all_attributes_tupels_list,
+                         comp_type='max_depth',
+                         max_depth_from=1,
+                         max_depth_to=30,       #bei 25 konstante Tiefe
+                         step=1)
+plt.show()
+#decision_tree_crossvalidation(train, target, number_features+category_features)
+print("done")

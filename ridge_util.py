@@ -73,7 +73,7 @@ def ridge_regression_crossvalidation(train, target, attr, alpha, splits=10):
     return  mean_root_mean_squared_error
 
 
-def ridge_regression_alpha_comparison(train, alpha_from, alpha_to, step, target, attr, name, plot=True):
+def ridge_regression_alpha_comparison(train, target, attr, alpha_from, alpha_to, step, name, plot=True):
     mrmse_val = []
     best_mrmse = np.infty
     for x in np.arange(alpha_from, alpha_to, step):

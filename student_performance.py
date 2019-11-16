@@ -15,6 +15,9 @@ target_attribute_student = "Grade"
 numeric_attributes_student = ["age", "Medu", "Fedu", "traveltime", "studytime", "failures", "famrel", "freetime", "goout", "Dalc", "Walc", "health", "absences"]
 other_attributes_student = ["failures", "Medu","studytime", "goout", "age", "freetime",   "Fedu", "absences"]           #schneidet am besten ab bis jetzt
 top7_attributes_student =  ["failures", "Medu","studytime", "goout", "age", "traveltime", "Fedu"]
+all_attributes_tupels_list = [[numeric_attributes_student, 'Numeric attributes'], [other_attributes_student, 'Other attributes'], [top7_attributes_student, 'Top 7 attributes']]
+
+
 #1, 2, 3, 6, 7, 8, 13, 14, 15, 21, 22, 30 , 31, 32, 33
 #categorical data that is missing above: "Pstatus","higher" (corr:0.21, wants higher education), "internet", "absences"
 # comparing with means we see that school GP is  but Pstatus is not correlated https://rstudio-pubs-static.s3.amazonaws.com/108835_65a73467d96f4c79a5f808f5b8833922.html
@@ -276,28 +279,45 @@ print("mse", list_MRMSE_student_mse)
 print("friedman_mse", list_MRMSE_student_friedman_mse)
 
 
-#%% Student performance ridge regression
-ridge_regression_alpha_comparison(train_data_student,
-                                  0,
-                                  50,
-                                  5,
-                                  target_attribute_student,
+#%% Student performance ridge regression alpha comparison
+ridge_regression_alpha_comparison(train_data_student, target_attribute_student,
                                   numeric_attributes_student,
+                                  0, 50, 5,
                                   "Numeric")
-ridge_regression_alpha_comparison(train_data_student,
-                                  0,
-                                  50,
-                                  5,
-                                  target_attribute_student,
+ridge_regression_alpha_comparison(train_data_student, target_attribute_student,
                                   other_attributes_student,
+                                  0, 50, 5,
                                   "Other attributes")
 
-ridge_regression_alpha_comparison(train_data_student,
-                                  0,
-                                  50,
-                                  5,
-                                  target_attribute_student,
+ridge_regression_alpha_comparison(train_data_student, target_attribute_student,
                                   top7_attributes_student,
+                                  0, 50, 5,
                                   "Top 7 attributes")
 plt.show()
 
+#%% Student performance decision tree regression criterion comparison
+decision_tree_regression_criterion_comparison(train_data_student,target_attribute_student,
+                                              numeric_attributes_student,
+                                              criterion = ['mse', 'friedman_mse'],
+                                              name = "Numeric")
+
+decision_tree_regression_criterion_comparison(train_data_student,target_attribute_student,
+                                              other_attributes_student,
+                                              criterion=['mse', 'friedman_mse'],
+                                              name = "Other attributes")
+
+decision_tree_regression_criterion_comparison(train_data_student,target_attribute_student,
+                                              top7_attributes_student,
+                                              criterion=['mse', 'friedman_mse'],
+                                              name = "Top 7 attributes")
+plt.show()
+
+#%% Student performance decision tree regression max_depth comparison
+
+decision_tree_comparison(train_data_student, target_attribute_student,all_attributes_tupels_list,
+                         comp_type='max_depth',
+                         max_depth_from=1,
+                         max_depth_to=20,
+                         step=1)
+plt.show()
+print("done")

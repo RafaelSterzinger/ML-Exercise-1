@@ -67,3 +67,4 @@ bike_y_pred = regr.predict(test_data.drop(['id', 'dteday'], axis=1))
 
 print(info)
 print(np.sqrt(mean_squared_error(info, bike_y_pred)))
+
