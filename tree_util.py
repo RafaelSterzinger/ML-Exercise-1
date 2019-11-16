@@ -103,8 +103,8 @@ def decision_tree_regression_max_depth_comparison(train_data, ytarget, x_attribu
         t = np.arange(0, len(mrmse_val))
         plt.plot(t * step + 1, mrmse_val[0:len(mrmse_val)] , '--', label=name)
         plt.xticks(t * step)
-        plt.xlabel('max_depth')
-        plt.ylabel('rmse')
+        plt.xlabel('Max Depth')
+        plt.ylabel('Root Mean Squared Error')
         plt.scatter(best_max_depth, best_mrmse)
         plt.legend()
 
