@@ -5,13 +5,8 @@ from matplotlib import pyplot
 import numpy as np
 import matplotlib.pyplot as plt
 from ridge_util import *
+from tree_util import *
 
-
-from sklearn.ensemble import GradientBoostingClassifier
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import mean_squared_error
 #%% Student performance init
 
 path_student = "./plots/student_performance/"
@@ -147,7 +142,7 @@ print("higher education corr", bin_corr)
 
 
 #%% Decision Tree
-def decision_tree(train_data, test_data, y_target, x_attributes, test_label, bool_accuracy_score, min_samples_leaf=1,  max_depth=None, criterion="mse"):#'gini'):            only for Classification
+'''def decision_tree(train_data, test_data, y_target, x_attributes, test_label, bool_accuracy_score, min_samples_leaf=1,  max_depth=None, criterion="mse"):#'gini'):            only for Classification
     from sklearn.tree import DecisionTreeClassifier
     from sklearn.metrics import accuracy_score
     from sklearn.metrics import mean_squared_error
@@ -175,7 +170,7 @@ def decision_tree(train_data, test_data, y_target, x_attributes, test_label, boo
     if (bool_accuracy_score):
         test_y = test_data[y_target]
 
-    '''
+    
     Create the object of the Decision Tree model
     You can also add other parameters and test your code here
     Some parameters are : max_depth and max_features
@@ -183,7 +178,6 @@ def decision_tree(train_data, test_data, y_target, x_attributes, test_label, boo
 
     https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html
 
-     '''
     #model = DecisionTreeClassifier(criterion=criterion, min_samples_leaf=min_samples_leaf, max_depth=max_depth)
     model = DecisionTreeRegressor(min_samples_leaf=min_samples_leaf, max_depth=max_depth, criterion=criterion)
 
@@ -194,7 +188,6 @@ def decision_tree(train_data, test_data, y_target, x_attributes, test_label, boo
     # depth of the decision tree
     print('Depth of the Decision Tree :', model.get_depth())
 
-    '''
     # predict the target on the train dataset
     predict_train = model.predict(train_x)
     print('Target on train data', predict_train)
@@ -202,7 +195,6 @@ def decision_tree(train_data, test_data, y_target, x_attributes, test_label, boo
     # Accuray Score on train dataset
     accuracy_train = accuracy_score(train_y, predict_train)
     print('accuracy_score on train dataset : ', accuracy_train)
-    '''
 
     # predict the target on the test dataset
     predict_test = model.predict(test_x)
@@ -210,12 +202,10 @@ def decision_tree(train_data, test_data, y_target, x_attributes, test_label, boo
     if (bool_accuracy_score):
         print('Actual test y values', test_y)
 
-    '''     Only when using DecisionTreeClassifier
     # Accuracy Score on test dataset
     if (bool_accuracy_score):
         accuracy_test = accuracy_score(test_y, predict_test)
         print('accuracy_score on test dataset : ', accuracy_test)
-    '''
 
     # Mean Squared Error on test dataset
     if (bool_accuracy_score):                                                                                           #todo call the function with the data unprocessed, but use processing here to get MSE from
@@ -224,8 +214,9 @@ def decision_tree(train_data, test_data, y_target, x_attributes, test_label, boo
         print('root mean_squared_error on test dataset : ', root_mean_squared_error)
 
     return root_mean_squared_error, predict_test
-
+'''
 #%% Kfold Test Student Performance
+'''
 def decision_tree_crossvalidation(train_data, target_attribute, numeric_attributes, test_label, criterion, min_samples_leaf=1, splits=10, max_depth=None):
     from sklearn.model_selection import KFold
     kf = KFold(n_splits=splits)
@@ -236,10 +227,10 @@ def decision_tree_crossvalidation(train_data, target_attribute, numeric_attribut
     for train_index, test_index in kf.split(train_data):
         print("TRAIN:", train_index, "TEST:", test_index)
         print("______________________")
-        '''gradient_boosting_classifier(train_data.drop(test_index)[numeric_attributes],
+gradient_boosting_classifier(train_data.drop(test_index)[numeric_attributes],
                                      train_data.drop(train_index)[numeric_attributes],
                                      test_label)
-        '''
+
         sum_RMSE = sum_RMSE + decision_tree(train_data.drop(test_index),
                                             train_data.drop(train_index),
                                             target_attribute,
@@ -253,7 +244,7 @@ def decision_tree_crossvalidation(train_data, target_attribute, numeric_attribut
     mean_root_mean_squared_error = sum_RMSE/count
     print("Crossvalidation mean_root_mean_squared_error : ", mean_root_mean_squared_error)
     return  mean_root_mean_squared_error
-
+'''
 #%% Prediction Student Performance
 print("prediction start")
 
@@ -264,35 +255,6 @@ print("prediction done")
 student_submission_tree = test_label_student.assign(Grade=student_y_pred)
 print(student_submission_tree)
 student_submission_tree.to_csv(path_student + "tree_pred.csv", index=False)
-
-#%% Kfold Test Bike sharing                     #Categorical Data
-
-list_MRMSE_bike_mse = []
-list_MRMSE_bike_friedman_mse = []
-min_samples_leaf_bike = 100                      #bei ~100 am besten mit cross validation gini 128 & min_samples_leaf ~100 (ohne zu setzten für den Datensatz explizit, noch besser)
-max_depth_bike = 5
-while max_depth_bike < 35: #min_samples_leaf <= 200:
-    MRMSE_bike_entropy = decision_tree_crossvalidation(train_data_bike, target_attribute_bike, attr_bike, test_label_bike, 'mse', max_depth=max_depth_bike)#, min_samples_leaf)
-    MRMSE_bike_gini = decision_tree_crossvalidation(train_data_bike, target_attribute_bike, attr_bike, test_label_bike, 'friedman_mse', max_depth=max_depth_bike)#, min_samples_leaf)
-
-    list_MRMSE_bike_mse.append(MRMSE_bike_entropy)
-    list_MRMSE_bike_friedman_mse.append(MRMSE_bike_gini)
-    min_samples_leaf_bike = min_samples_leaf_bike + 10
-    max_depth_bike = max_depth_bike + 3
-
-print("max depth")
-print("mse", list_MRMSE_bike_mse)
-print("friedman_mse", list_MRMSE_bike_friedman_mse)
-
-#%%
-
-a = decision_tree_crossvalidation(train_data_student, target_attribute_student, other_attributes_student, test_label_student, 'mse')#, max_depth=4)
-b = decision_tree_crossvalidation(train_data_student, target_attribute_student, numeric_attributes_student, test_label_student, 'mse')#, max_depth=4)
-c = decision_tree_crossvalidation(train_data_student, target_attribute_student, top7_attributes_student, test_label_student, 'mse')#, max_depth=4)
-
-print("other ",a)
-print("numeric", b)
-print("top7", c)
 
 
 #%% Kfold Test Student Performance with
@@ -313,99 +275,29 @@ print("max depth", max_depth_student)
 print("mse", list_MRMSE_student_mse)
 print("friedman_mse", list_MRMSE_student_friedman_mse)
 
-#%% Student performance ridge regression
 
+#%% Student performance ridge regression
 ridge_regression_alpha_comparison(train_data_student,
                                   0,
-                                  100,
-                                  10,
+                                  50,
+                                  5,
                                   target_attribute_student,
                                   numeric_attributes_student,
                                   "Numeric")
 ridge_regression_alpha_comparison(train_data_student,
                                   0,
-                                  100,
-                                  10,
+                                  50,
+                                  5,
                                   target_attribute_student,
                                   other_attributes_student,
                                   "Other attributes")
 
 ridge_regression_alpha_comparison(train_data_student,
                                   0,
-                                  100,
-                                  10,
+                                  50,
+                                  5,
                                   target_attribute_student,
                                   top7_attributes_student,
                                   "Top 7 attributes")
 plt.show()
 
-
-
-#%%         not used: Classification Data
-
-
-
-
-
-#______________________________________
-
-#%% Kfold Test Bike sharing                     #Categorical Data
-
-list_MRMSE_bike_entropy = []
-list_MRMSE_bike_gini = []
-min_samples_leaf_bike = 100                      #bei ~100 am besten mit cross validation gini 128 & min_samples_leaf ~100 (ohne zu setzten für den Datensatz explizit, noch besser)
-max_depth_bike = 5
-while max_depth_bike < 35: #min_samples_leaf <= 200:
-    MRMSE_bike_entropy = decision_tree_crossvalidation(train_data_bike, target_attribute_bike, attr_bike, test_label_bike, 'entropy', max_depth=max_depth_bike)#, min_samples_leaf)
-    MRMSE_bike_gini = decision_tree_crossvalidation(train_data_bike, target_attribute_bike, attr_bike, test_label_bike, 'gini', max_depth=max_depth_bike)#, min_samples_leaf)
-
-    list_MRMSE_bike_entropy.append(MRMSE_bike_entropy)
-    list_MRMSE_bike_gini.append(MRMSE_bike_gini)
-    min_samples_leaf_bike = min_samples_leaf_bike + 10
-    max_depth_bike = max_depth_bike + 3
-
-print("max depth")
-print("entropy", list_MRMSE_bike_entropy)
-print("gini", list_MRMSE_bike_gini)
-
-#%% Kfold Test Student Performance with DecisionTree Classification         -> best crossvalidation was around 4.0 - 4.3
-list_MRMSE_student_entropy = []
-list_MRMSE_student_gini = []
-min_samples_leaf_student = 100                      #bei ~100 am besten mit cross validation gini 128 & min_samples_leaf ~100 (ohne zu setzten für den Datensatz explizit, noch besser)
-max_depth_student = 1
-while max_depth_student < 15: #min_samples_leaf <= 200:
-    MRMSE_student_entropy = decision_tree_crossvalidation(train_data_student, target_attribute_student, numeric_attributes_student, test_label_student, 'entropy', max_depth=max_depth_student)#, min_samples_leaf)
-    MRMSE_student_gini = decision_tree_crossvalidation(train_data_student, target_attribute_student, numeric_attributes_student, test_label_student, 'gini', max_depth=max_depth_student)
-
-    list_MRMSE_student_entropy.append(MRMSE_student_entropy)
-    list_MRMSE_student_gini.append(MRMSE_student_gini)
-    #min_samples_leaf = min_samples_leaf + 10
-    max_depth_student = max_depth_student + 1
-
-print("max depth", max_depth_student)
-print("entropy", list_MRMSE_student_entropy)
-print("gini", list_MRMSE_student_gini)
-
-
-'''
-#%% Kfold Test Student Performance
-from sklearn.model_selection import KFold
-kf = KFold(n_splits=10)
-kf.get_n_splits(train_data) # returns the number of splitting iterations in the cross-validatorprint(kf) KFold(n_splits=10, random_state=None, shuffle=False)
-
-count = 1
-sum_RMSE = 0
-for train_index, test_index in kf.split(train_data):
-    print("TRAIN:", train_index, "TEST:", test_index)
-    print("______________________")
-        
-    sum_RMSE = sum_RMSE + decision_tree(train_data.drop(test_index),
-                                        train_data.drop(train_index),
-                                        target_attribute,
-                                        numeric_attributes,
-                                        test_label, True)[0]
-    count = count + 1
-
-mean_root_mean_squared_error = sum_RMSE/count
-print("Crossvalidation mean_root_mean_squared_error : ", mean_root_mean_squared_error)
-'''

@@ -50,14 +50,15 @@ plot = sns.boxplot(data=train, y="cnt", x="hr", orient="v").get_figure()
 plot.show()
 plot.savefig(path + "hour_boxplot.png")
 
-# %% Bike Sharing Ridge Regression
-
+# %% Bike Sharing Ridge Regression todo DEPRECATED
+''' 
 ridgeRegression(train, test, 0, 100, 10, number_features+category_features, target, groundTruth, "All attributes")
 ridgeRegression(train, test, 0, 100, 10, number_features, target, groundTruth, "Only Numerical values")
 ridgeRegression(train, test, 0, 100, 10, ["hum","hr","temp","season"], target, groundTruth, "Maximum correlating values")
 plt.show()
 # test_label = test_label.assign(cnt=bike_y_pred)
 # test_label.to_csv(path + "linreg_pred.csv", index=False)
+'''
 
 # %% Bike Sharing Ridge regression Alpha comparison with Cross validation and different attributes
 ridge_regression_alpha_comparison(train,

@@ -4,7 +4,8 @@ from sklearn.metrics import mean_squared_error
 import matplotlib.pyplot as plt
 from sklearn.model_selection import KFold
 
-
+#todo DEPRECATED
+'''
 def ridgeRegression(train, test, alphaFrom, alphaTo, step, attr, target, groundTruth, name, plot=True):
     train_X = train[attr]
     train_y = train[target]
@@ -34,17 +35,17 @@ def ridgeRegression(train, test, alphaFrom, alphaTo, step, attr, target, groundT
         plt.scatter(best_alpha, best_rmse)
         plt.legend()
     return best_rmse, best_alpha
+'''
 
+def ridge_regression(train_data, test_data, x_attributes, y_target, alpha):
+    train_x = train_data[x_attributes]
+    train_y = train_data[y_target]
 
-def ridgeRegression_only(train, test, attr, target, alpha):
-    train_X = train[attr]
-    train_y = train[target]
-
-    test_x = test[attr]
-    test_y = test[target]
+    test_x = test_data[x_attributes]
+    test_y = test_data[y_target]
 
     regr = linear_model.Ridge(alpha=alpha)
-    regr.fit(train_X, train_y)
+    regr.fit(train_x, train_y)
     pred = regr.predict(test_x)
     rmse = np.sqrt(mean_squared_error(test_y, pred))
 
@@ -57,14 +58,14 @@ def ridge_regression_crossvalidation(train, target, attr, alpha, splits=10):
     count = 1
     sum_RMSE = 0
     for train_index, test_index in kf.split(train):
-        print("TRAIN:", train_index, "TEST:", test_index)
-        print("______________________")
+        #print("TRAIN:", train_index, "TEST:", test_index)
+        #print("______________________")
 
-        sum_RMSE = sum_RMSE + ridgeRegression_only(train.drop(test_index),
-                                                   train.drop(train_index),
-                                                   attr,
-                                                   target,
-                                                   alpha)
+        sum_RMSE = sum_RMSE + ridge_regression(train.drop(test_index),
+                                               train.drop(train_index),
+                                               attr,
+                                               target,
+                                               alpha)
         count = count + 1
 
     mean_root_mean_squared_error = sum_RMSE/count
@@ -76,17 +77,17 @@ def ridge_regression_alpha_comparison(train, alpha_from, alpha_to, step, target,
     mrmse_val = []
     best_mrmse = np.infty
     for x in np.arange(alpha_from, alpha_to, step):
-        mrmsq = ridge_regression_crossvalidation(train,
+        mrmse = ridge_regression_crossvalidation(train,
                                                  target, attr,
                                                  x)
         if x == alpha_from:
-            best_mrmse = mrmsq
+            best_mrmse = mrmse
             best_alpha = x
-        elif mrmsq < best_mrmse:
-            best_mrmse = mrmsq
+        elif mrmse < best_mrmse:
+            best_mrmse = mrmse
             best_alpha = x
 
-        mrmse_val.append(mrmsq)  # store rmse values
+        mrmse_val.append(mrmse)  # store rmse values
 
     if plot:
         t = np.arange(0, len(mrmse_val))
