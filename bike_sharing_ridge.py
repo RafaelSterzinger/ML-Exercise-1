@@ -2,6 +2,7 @@ import pandas as pd
 import seaborn as sns
 import numpy as np
 from ridge_util import *
+from knn_utils import *
 from sklearn.metrics import mean_squared_error
 from matplotlib import pyplot
 from sklearn import linear_model
@@ -51,7 +52,9 @@ plot.savefig(path + "hour_boxplot.png")
 
 # %% Bike Sharing Ridge Regression
 
-result = ridgeRegression(train, test, 0, 200, 20, number_features+category_features, target, groundTruth, "Numerical values")
+ridgeRegression(train, test, 0, 100, 10, number_features+category_features, target, groundTruth, "All attributes")
+ridgeRegression(train, test, 0, 100, 10, number_features, target, groundTruth, "Only Numerical values")
+ridgeRegression(train, test, 0, 100, 10, ["hum","hr","temp","season"], target, groundTruth, "Maximum correlating values")
 plt.show()
 # test_label = test_label.assign(cnt=bike_y_pred)
 # test_label.to_csv(path + "linreg_pred.csv", index=False)
