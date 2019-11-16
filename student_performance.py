@@ -4,6 +4,7 @@ import seaborn as sns
 from matplotlib import pyplot
 import numpy as np
 import matplotlib.pyplot as plt
+from ridge_util import *
 
 
 from sklearn.ensemble import GradientBoostingClassifier
@@ -312,6 +313,31 @@ print("max depth", max_depth_student)
 print("mse", list_MRMSE_student_mse)
 print("friedman_mse", list_MRMSE_student_friedman_mse)
 
+#%% Student performance ridge regression
+
+ridge_regression_alpha_comparison(train_data_student,
+                                  0,
+                                  100,
+                                  10,
+                                  target_attribute_student,
+                                  numeric_attributes_student,
+                                  "Numeric")
+ridge_regression_alpha_comparison(train_data_student,
+                                  0,
+                                  100,
+                                  10,
+                                  target_attribute_student,
+                                  other_attributes_student,
+                                  "Other attributes")
+
+ridge_regression_alpha_comparison(train_data_student,
+                                  0,
+                                  100,
+                                  10,
+                                  target_attribute_student,
+                                  top7_attributes_student,
+                                  "Top 7 attributes")
+plt.show()
 
 
 

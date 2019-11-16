@@ -90,8 +90,8 @@ def ridge_regression_alpha_comparison(train, alpha_from, alpha_to, step, target,
 
     if plot:
         t = np.arange(0, len(mrmse_val))
-        plt.plot(t, mrmse_val[0:len(mrmse_val)], '--', label=name)
-        plt.xticks(t)
+        plt.plot(t * step, mrmse_val[0:len(mrmse_val)] , '--', label=name)
+        plt.xticks(t * step)
         plt.xlabel('alpha')
         plt.ylabel('rsme')
         plt.scatter(best_alpha, best_mrmse)
