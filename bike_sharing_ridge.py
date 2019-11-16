@@ -58,3 +58,28 @@ ridgeRegression(train, test, 0, 100, 10, ["hum","hr","temp","season"], target, g
 plt.show()
 # test_label = test_label.assign(cnt=bike_y_pred)
 # test_label.to_csv(path + "linreg_pred.csv", index=False)
+
+# %% Bike Sharing Ridge regression Alpha comparison with Cross validation and different attributes
+ridge_regression_alpha_comparison(train,
+                                  0,
+                                  100,
+                                  10,
+                                  target,
+                                  number_features+category_features,
+                                  "All attributes")
+ridge_regression_alpha_comparison(train,
+                                  0,
+                                  100,
+                                  10,
+                                  target,
+                                  number_features,
+                                  "Only Numerical values")
+
+ridge_regression_alpha_comparison(train,
+                                  0,
+                                  100,
+                                  10,
+                                  target,
+                                  ["hum","hr","temp","season"],
+                                  "Maximum correlating values")
+plt.show()

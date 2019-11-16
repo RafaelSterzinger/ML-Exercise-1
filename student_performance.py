@@ -63,7 +63,7 @@ plot.savefig(path_student + data_initials_student + "heatmap.png")
 
 #%% Data analysis
 print("Mean by school", train_data_student.groupby('school')[target_attribute_student].mean())
-pairplot_student = sns.pairplot(data = train_data_student[numeric_attributes_student])
+pairplot_student = sns.pairplot(data = train_data_student[numeric_attributes_student])              #todo is missing Grade to see visualisation
 pairplot_student.savefig(path_student + data_initials_student + "pairplot_numeric_values.png")
 
 #plt.figure(figsize=(10,6))
@@ -217,7 +217,7 @@ def decision_tree(train_data, test_data, y_target, x_attributes, test_label, boo
     '''
 
     # Mean Squared Error on test dataset
-    if (bool_accuracy_score):
+    if (bool_accuracy_score):                                                                                           #todo call the function with the data unprocessed, but use processing here to get MSE from
         mean_squared_error = mean_squared_error(test_y, predict_test)
         root_mean_squared_error = sqrt(mean_squared_error)
         print('root mean_squared_error on test dataset : ', root_mean_squared_error)
