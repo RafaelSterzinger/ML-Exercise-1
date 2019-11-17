@@ -17,6 +17,9 @@ other_attributes_student = ["failures", "Medu","studytime", "goout", "age", "fre
 top7_attributes_student =  ["failures", "Medu","studytime", "goout", "age", "traveltime", "Fedu"]
 all_attributes_tupels_list = [[numeric_attributes_student, 'Numeric attributes'], [other_attributes_student, 'Other attributes'], [top7_attributes_student, 'Top 7 attributes']]
 
+#one hot encoding & Ordinal Encoding
+
+# lots of categories -> Binary encoding
 
 #1, 2, 3, 6, 7, 8, 13, 14, 15, 21, 22, 30 , 31, 32, 33
 #categorical data that is missing above: "Pstatus","higher" (corr:0.21, wants higher education), "internet", "absences"
@@ -30,17 +33,6 @@ nominal_attributes = ["Mjob", "Fjob", "reason", "guardian"]
 train_data_student = pd.read_csv("datasets/student_performance/StudentPerformance.shuf.train.csv")
 test_data_student = pd.read_csv("datasets/student_performance/StudentPerformance.shuf.test.csv")
 test_label_student = pd.read_csv("datasets/student_performance/StudentPerformance.shuf.sampleSolution.csv")
-
-#%% Bike Sharing init
-path_bike = "./plots/bike_sharing/"
-
-train_data_bike = pd.read_csv("datasets/bike_sharing/bikeSharing.shuf.train.csv")
-test_data_bike = pd.read_csv("datasets/bike_sharing/bikeSharing.shuf.test.csv")
-test_label_bike = pd.read_csv("datasets/bike_sharing/bikeSharing.shuf.sampleSolution.csv")
-
-target_attribute_bike = 'cnt'
-attr_bike = ["temp", "atemp", "hum", "hr", "season"]
-
 
 #%% Vizualisation Check for missing values
 print(train_data_student.isnull().sum())
@@ -144,141 +136,6 @@ print("higher education corr", bin_corr)
 #pd.get_dummies(train_data_student, columns=["reason"]).head()
 
 
-#%% Decision Tree
-'''def decision_tree(train_data, test_data, y_target, x_attributes, test_label, bool_accuracy_score, min_samples_leaf=1,  max_depth=None, criterion="mse"):#'gini'):            only for Classification
-    from sklearn.tree import DecisionTreeClassifier
-    from sklearn.metrics import accuracy_score
-    from sklearn.metrics import mean_squared_error
-    from math import sqrt
-
-    root_mean_squared_error = -1                         #only changed if bool_accuracy_score = true
-
-
-    # shape of the dataset
-    # print('Shape of training data :',train_data.shape)
-    # print('Shape of testing data :',test_data.shape)
-
-    # Now, we need to predict the missing target variable in the test data
-    # target variable - Survived
-
-    # seperate the independent and target variable on training data
-    train_x = train_data[x_attributes]
-    train_y = train_data[y_target]                                                                                      #todo double brackets if single value changes type? train_data[[y_target]]
-
-    # seperate the independent and target variable on testing data
-    test_x = test_data[x_attributes]
-    #if (bool_accuracy_score):
-    #    test_x = test_data.drop(columns=[target_attribute], axis=1)
-
-    if (bool_accuracy_score):
-        test_y = test_data[y_target]
-
-    
-    Create the object of the Decision Tree model
-    You can also add other parameters and test your code here
-    Some parameters are : max_depth and max_features
-    Documentation of sklearn DecisionTreeClassifier: 
-
-    https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html
-
-    #model = DecisionTreeClassifier(criterion=criterion, min_samples_leaf=min_samples_leaf, max_depth=max_depth)
-    model = DecisionTreeRegressor(min_samples_leaf=min_samples_leaf, max_depth=max_depth, criterion=criterion)
-
-
-    # fit the model with the training data
-    model.fit(train_x, train_y)
-
-    # depth of the decision tree
-    print('Depth of the Decision Tree :', model.get_depth())
-
-    # predict the target on the train dataset
-    predict_train = model.predict(train_x)
-    print('Target on train data', predict_train)
-
-    # Accuray Score on train dataset
-    accuracy_train = accuracy_score(train_y, predict_train)
-    print('accuracy_score on train dataset : ', accuracy_train)
-
-    # predict the target on the test dataset
-    predict_test = model.predict(test_x)
-    print('Target on test data', predict_test)
-    if (bool_accuracy_score):
-        print('Actual test y values', test_y)
-
-    # Accuracy Score on test dataset
-    if (bool_accuracy_score):
-        accuracy_test = accuracy_score(test_y, predict_test)
-        print('accuracy_score on test dataset : ', accuracy_test)
-
-    # Mean Squared Error on test dataset
-    if (bool_accuracy_score):                                                                                           #todo call the function with the data unprocessed, but use processing here to get MSE from
-        mean_squared_error = mean_squared_error(test_y, predict_test)
-        root_mean_squared_error = sqrt(mean_squared_error)
-        print('root mean_squared_error on test dataset : ', root_mean_squared_error)
-
-    return root_mean_squared_error, predict_test
-'''
-#%% Kfold Test Student Performance
-'''
-def decision_tree_crossvalidation(train_data, target_attribute, numeric_attributes, test_label, criterion, min_samples_leaf=1, splits=10, max_depth=None):
-    from sklearn.model_selection import KFold
-    kf = KFold(n_splits=splits)
-    kf.get_n_splits(train_data) # returns the number of splitting iterations in the cross-validatorprint(kf) KFold(n_splits=10, random_state=None, shuffle=False)
-
-    count = 1
-    sum_RMSE = 0
-    for train_index, test_index in kf.split(train_data):
-        print("TRAIN:", train_index, "TEST:", test_index)
-        print("______________________")
-gradient_boosting_classifier(train_data.drop(test_index)[numeric_attributes],
-                                     train_data.drop(train_index)[numeric_attributes],
-                                     test_label)
-
-        sum_RMSE = sum_RMSE + decision_tree(train_data.drop(test_index),
-                                            train_data.drop(train_index),
-                                            target_attribute,
-                                            numeric_attributes,
-                                            test_label, True,
-                                            min_samples_leaf,
-                                            max_depth=max_depth,
-                                            criterion=criterion)[0]
-        count = count + 1
-
-    mean_root_mean_squared_error = sum_RMSE/count
-    print("Crossvalidation mean_root_mean_squared_error : ", mean_root_mean_squared_error)
-    return  mean_root_mean_squared_error
-'''
-#%% Prediction Student Performance
-print("prediction start")
-
-student_y_pred = decision_tree(train_data_student, test_data_student, target_attribute_student, numeric_attributes_student, test_label_student, False, max_depth=6)[1]
-
-print("prediction done")
-
-student_submission_tree = test_label_student.assign(Grade=student_y_pred)
-print(student_submission_tree)
-student_submission_tree.to_csv(path_student + "tree_pred.csv", index=False)
-
-
-#%% Kfold Test Student Performance with
-list_MRMSE_student_mse = []
-list_MRMSE_student_friedman_mse = []
-min_samples_leaf_student = 100                      #bei ~100 am besten mit cross validation gini 128 & min_samples_leaf ~100 (ohne zu setzten für den Datensatz explizit, noch besser)
-max_depth_student = 1
-while max_depth_student < 15: #min_samples_leaf <= 200:
-    MRMSE_student_mse = decision_tree_crossvalidation(train_data_student, target_attribute_student, numeric_attributes_student, test_label_student, criterion='mse', max_depth=max_depth_student)#, min_samples_leaf)
-    MRMSE_student_friedman_mse = decision_tree_crossvalidation(train_data_student, target_attribute_student, numeric_attributes_student, test_label_student, criterion='friedman_mse', max_depth=max_depth_student)
-
-    list_MRMSE_student_mse.append(MRMSE_student_mse)
-    list_MRMSE_student_friedman_mse.append(MRMSE_student_friedman_mse)
-    #min_samples_leaf = min_samples_leaf + 10
-    max_depth_student = max_depth_student + 1
-
-print("max depth", max_depth_student)
-print("mse", list_MRMSE_student_mse)
-print("friedman_mse", list_MRMSE_student_friedman_mse)
-
-
 #%% Student performance ridge regression alpha comparison
 ridge_regression_alpha_comparison(train_data_student, target_attribute_student,
                                   numeric_attributes_student,
@@ -314,10 +171,21 @@ plt.show()
 
 #%% Student performance decision tree regression max_depth comparison
 
-decision_tree_comparison(train_data_student, target_attribute_student,all_attributes_tupels_list,
+decision_tree_comparison(train_data_student, target_attribute_student, all_attributes_tupels_list,
                          comp_type='max_depth',
-                         max_depth_from=1,
-                         max_depth_to=20,
-                         step=1)
+                         p_from=1,
+                         p_to=20,
+                         p_step=1)
 plt.show()
 print("done")
+
+#%%
+decision_tree_crossvalidation(train_data_student, test_data_student, target_attribute_student, nominal_attributes)
+
+#%% Bike sharing decision tree regression max_depth comparison
+decision_tree_comparison(train_data_student, target_attribute_student,all_attributes_tupels_list,
+                         comp_type='max_depth',
+                         p_from=1,
+                         p_to=10,       #bei 25 konstante Tiefe
+                         p_step=1)
+plt.show()
