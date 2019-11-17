@@ -126,11 +126,16 @@ plt.tight_layout()
 
 #%%
 from sklearn.linear_model import BayesianRidge
+from sklearn.naive_bayes import GaussianNB
 
-clf = BayesianRidge(compute_score=True)
-clf.fit(x_train, y_train)
-pred=clf.predict(x_test)
-
-rsme = sqrt(mean_squared_error(y_test, pred))  # calculate rmse
+# clf = BayesianRidge(compute_score=True)
+# clf.fit(x_train, y_train)
+# pred=clf.predict(x_test)
+#
+# rsme = sqrt(mean_squared_error(y_test, pred))  # calculate rmse
+# rsme
+from sklearn.naive_bayes import GaussianNB
+gnb = GaussianNB()
+y_pred = gnb.fit(x_train, y_train).predict(x_test)
+rsme = sqrt(mean_squared_error(y_test, y_pred))  # calculate rmse
 rsme
-
