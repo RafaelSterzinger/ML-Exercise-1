@@ -1,3 +1,5 @@
+import utils
+from sklearn.model_selection import train_test_split
 import pandas as pd
 from sklearn.metrics import mean_squared_error
 import numpy as np
@@ -10,17 +12,12 @@ from sklearn.model_selection import KFold
 import matplotlib.pyplot as plt
 
 
-def mlp(train_data, test_data, target, attributes=None):
-    if attributes is None:
-        train_x = train_data.drop(target, axis=1)
-        train_y = train_data[target]
-        test_x = test_data.drop(target, axis=1)
-        test_y = test_data[target]
-    else:
-        train_x = train_data[attributes]
-        train_y = train_data[target]
-        test_x = test_data[attributes]
-        test_y = test_data[target]
+def mlp(train_data, test_data, target, attributes):
+
+    train_x = train_data[attributes]
+    train_y = train_data[target]
+    test_x = test_data[attributes]
+    test_y = test_data[target]
 
     model = MLPRegressor(hidden_layer_sizes=(20, 4),
                          activation='logistic',
@@ -34,7 +31,7 @@ def mlp(train_data, test_data, target, attributes=None):
     predict_test = model.predict(test_x)
     root_mean_squared_error = np.sqrt(mean_squared_error(test_y, predict_test))
 
-    return root_mean_squared_error
+    return root_mean_squared_error, model
 
 
 def mlp_cross_validation(train_data, target, x_attributes=None, splits=10):
@@ -44,14 +41,20 @@ def mlp_cross_validation(train_data, target, x_attributes=None, splits=10):
     count = 0
     sum_RMSE = 0
     for train_index, test_index in kf.split(train_data):
-        sum_RMSE = sum_RMSE + mlp(train_data=train_data.drop(test_index),
+        rmse, model = mlp(train_data=train_data.drop(test_index),
                                   test_data=train_data.drop(train_index),
                                   target=target,
                                   attributes=x_attributes)
+        sum_RMSE = sum_RMSE + rmse
         count = count + 1
 
     mean_root_mean_squared_error = sum_RMSE/count
     return  mean_root_mean_squared_error
 
 
+def plot_loss(model):
+    # Plot the 'loss_curve_' protery on model to see how well we are learning over the iterations
+    # Use Pandas built in plot method on DataFrame to creat plot in one line of code
+    pd.DataFrame(model.loss_curve_).plot()
+    plt.show()
 
