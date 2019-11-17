@@ -92,12 +92,16 @@ find_best_rmse('with all attributes and minkowski', x_train, y_train, x_test, y_
 plt.show()
 
 # %% mlp comparision
-#mlp_regression_layer_comparision(train_data, target, number_features, [(7, 7, 7), (5, 7, 5), (14), (5, 5)], "relu",name="MLP with (7,7,7);(5,7,5);(14);(5,5) layers")
+models = [(5, 7, 7), (7, 5, 5), (7, 7, 5, 3)]
+df = mlp_regression(train_data, number_features, 'EPR', models, "logistic")
 
-#train_x, train_y, test_x, test_y = make_split(train_data, target,0.3)
-#mlp_regression(train_x+train_y,test_x+test_y,number_features,target,(7,7,7))
-#plt.show()
+df = pd.concat([df, mlp_regression(train_data, number_features, 'EPR', models, "relu")])
 
+df = pd.concat([df, mlp_regression(train_data, number_features, 'EPR', models, "tanh")])
+
+sns.catplot(x='Layers', y='RSME', hue='Activation',data = df, kind='bar')
+
+plt.show()
 
 # %% Outlier removal
 train_data_out = train_data[(np.abs(stats.zscore(train_data)) < 3).all(axis=1)]
@@ -158,4 +162,26 @@ find_best_rmse('with top 3 attributes and minkowski', x_train, y_train, x_test, 
 
 plt.show()
 
+# %% mlp comparision, with outlier cleansing
+models = [(5, 7, 7), (7, 5, 5), (7, 7, 5, 3)]
+df = mlp_regression(train_data_out, number_features, 'EPR', models, "logistic")
+
+df = pd.concat([df, mlp_regression(train_data_out, number_features, 'EPR', models, "relu")])
+
+df = pd.concat([df, mlp_regression(train_data_out, number_features, 'EPR', models, "tanh")])
+
+sns.catplot(x='Layers', y='RSME', hue='Activation',data = df, kind='bar')
+
+plt.show()
+# %% mlp comparision outlier cleansing, with top correlating
+models = [(5, 7, 7), (7, 5, 5), (7, 7, 5, 3)]
+df = mlp_regression(train_data_out, ["MMIN", "MMAX", "CACH", "EPR"], 'EPR', models, "logistic")
+
+df = pd.concat([df, mlp_regression(train_data_out, ["MMIN", "MMAX", "CACH", "EPR"], 'EPR', models, "relu")])
+
+df = pd.concat([df, mlp_regression(train_data_out, ["MMIN", "MMAX", "CACH", "EPR"], 'EPR', models, "tanh")])
+
+sns.catplot(x='Layers', y='RSME', hue='Activation',data = df, kind='bar')
+
+plt.show()
 # TODO: mit minmax skalierung
