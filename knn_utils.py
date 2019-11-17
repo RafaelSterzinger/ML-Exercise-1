@@ -62,7 +62,7 @@ def scale_standard(x_train,x_test):
 
 
 
-def find_best_rmse(name,x_train, y_train, x_test, y_test, k_max=23, metric='minkowski', plot=True, debug=False):
+def find_best_rmse(name,x_train, y_train, x_test, y_test, k_max=23, metric='euclidean', plot=True, debug=False):
     """ plot k vs rms and calculate best k """
     """
     :param k_max: maximum number of k to test for

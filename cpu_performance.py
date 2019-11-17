@@ -148,5 +148,5 @@ find_best_rmse('with top 3 attributes and mahalanobis',x_train, y_train, x_test,
 
 plt.show()
 
-
+#TODO: mit minmax skalierung
 
