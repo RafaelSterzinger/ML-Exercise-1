@@ -6,8 +6,6 @@ from sklearn.model_selection import train_test_split
 from sklearn import neighbors
 from sklearn.metrics import mean_squared_error
 from math import sqrt
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import KFold
 
@@ -46,30 +44,6 @@ def make_split(data, target, test_size=0.3):
     y_test = test[target]
     return x_train, y_train, x_test, y_test
 
-
-def scale_min_max(data):
-    """ scaling features with MinMax """
-    minmax_scaler = MinMaxScaler(feature_range=(0, 1))
-    x_train_minmax_scaled = pd.DataFrame(minmax_scaler.fit_transform(data), index=data.index,
-                                         columns=data.columns)
-    return x_train_minmax_scaled
-
-def scale_min_max_without_target(data, target):
-    """ scaling features with MinMax """
-    data_wo_target = data.drop(target, axis = 1)
-    minmax_scaler = MinMaxScaler(feature_range=(0, 1))
-    x_train_minmax_scaled = pd.DataFrame(minmax_scaler.fit_transform(data_wo_target), index=data.index,
-                                         columns=data_wo_target.columns)
-    x_train_minmax_scaled[target] = data[target]
-    return x_train_minmax_scaled
-
-
-def scale_standard(data):
-    """ scaling features with zscore """
-    standard_scalar = StandardScaler()
-    x_train_zscore_scaled = pd.DataFrame(standard_scalar.fit_transform(data), index=data.index,
-                                         columns=data.colums)
-    return x_train_zscore_scaled
 
 
 def find_best_rmse(name, x_train, y_train, x_test, y_test, k_max=23, metric='euclidean', plot=True, debug=False):
@@ -130,7 +104,8 @@ def kNN(train_data, test_data, y_target, x_attributes,
 
     return root_mean_squared_error #, predict_test
 
-def kNN_crossvalidation(train_data, ytarget, x_attributes,
+
+def knn_cross_validation(train_data, ytarget, x_attributes,
                         k=23,
                         metric='euclidean',
                         splits=10):
