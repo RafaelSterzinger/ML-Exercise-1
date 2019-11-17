@@ -23,6 +23,7 @@ def convertTuple(tup):
     t += ')'
     return t
 
+
 def mlp_regression(train_data, x_attributes, y_target, layers, activation='relu'):
     rsme_layers = []
     values = x_attributes[:]
@@ -70,6 +71,7 @@ def mlp_regression_only(train_data, test_data, x_attributes, y_target, layer, ac
 
     return root_mean_squared_error
 
+
 def mlp_regression_cross_validation(train_data, ytarget, x_attributes,
                                     layer,
                                     activation='relu',
@@ -101,3 +103,5 @@ def mlp_regression_layer_comparison(train_data, x_attributes, y_target, layers, 
     layers = map(convertTuple, layers)
     activation = [activation]
     return pd.DataFrame(list(zip(activation*len(rsme_layers),layers,rsme_layers)),columns=['Activation','Layers','RSME'])
+
+

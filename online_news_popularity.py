@@ -90,9 +90,13 @@ plt.savefig(path+'knn_k_comparison.png')
 # %% min depth comparison
 decision_tree_comparison(train_data,
                          'shares',
-                         [highest_correlated],
+                         [[highest_correlated,'highest correlated']],
                          comp_type='max_depth',
                          p_from=1,
                          p_to=30,
                          p_step=2)
 plt.show()
+
+#%%
+#%%
+df = mlp_regression(train_data, highest_correlated, 'shares', [(5, 7, 7), (7, 5, 5), (7, 7, 5, 3)], "logistic")
