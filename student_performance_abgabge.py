@@ -284,17 +284,24 @@ sns.catplot(x='Layers', y='RSME', hue='Activation',data = df, kind='bar')
 plt.ylim(2.5,5.5)
 plt.show()
 
-# %% MLP
-#correlated_columns = highest_correlated_data_as_list(data, 'Grade', 10)
-#correlated_columns.remove('Grade')
-
-numeric_attributes_student = ["age", "Medu", "Fedu", "traveltime", "studytime", "failures", "famrel", "freetime",
-                              "goout", "Dalc", "Walc", "health", "absences"]
+# %% MLP Encoded data
 df = mlp_regression_layer_comparison(train_data_encoded, attr_own_all, 'Grade', [(5, 7, 7), (7, 5, 5), (7, 7, 5, 3)], "logistic")
 
 df = pd.concat([df, mlp_regression_layer_comparison(train_data_encoded, attr_own_all, 'Grade', [(5, 7, 7), (7, 5, 5), (7, 7, 5, 3)], "relu")])
 
 df = pd.concat([df, mlp_regression_layer_comparison(train_data_encoded, attr_own_all, 'Grade', [(5, 7, 7), (7, 5, 5), (7, 7, 5, 3)], "tanh")])
+
+sns.catplot(x='Layers', y='RSME', hue='Activation',data = df, kind='bar')
+#df = pd.melt(df, id_vars="Layers", var_name="Activation", value_name="RSME")
+plt.ylim(2.5,5.5)
+plt.show()
+
+# %% MLP Encoded data Normalized -> Logistik unbeeinflusst -> andere schlechter!
+df = mlp_regression_layer_comparison(train_data_encoded_normalized, attr_own_all, 'Grade', [(5, 7, 7), (7, 5, 5), (7, 7, 5, 3)], "logistic")
+
+df = pd.concat([df, mlp_regression_layer_comparison(train_data_encoded_normalized, attr_own_all, 'Grade', [(5, 7, 7), (7, 5, 5), (7, 7, 5, 3)], "relu")])
+
+df = pd.concat([df, mlp_regression_layer_comparison(train_data_encoded_normalized, attr_own_all, 'Grade', [(5, 7, 7), (7, 5, 5), (7, 7, 5, 3)], "tanh")])
 
 sns.catplot(x='Layers', y='RSME', hue='Activation',data = df, kind='bar')
 #df = pd.melt(df, id_vars="Layers", var_name="Activation", value_name="RSME")
