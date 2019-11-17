@@ -106,9 +106,9 @@ def kNN(train_data, test_data, y_target, x_attributes,
 
 
 def knn_cross_validation(train_data, ytarget, x_attributes,
-                        k=23,
-                        metric='euclidean',
-                        splits=10):
+                         k=23,
+                         metric='euclidean',
+                         splits=10):
     kf = KFold(n_splits=splits)
     kf.get_n_splits(train_data) # returns the number of splitting iterations in the cross-validatorprint(kf) KFold(n_splits=10, random_state=None, shuffle=False)
 
@@ -125,7 +125,7 @@ def knn_cross_validation(train_data, ytarget, x_attributes,
     return  mean_root_mean_squared_error
 
 
-def kNN_regression_k_comparison(train_data, ytarget, x_attributes, name,
+def knn_regression_k_comparison(train_data, ytarget, x_attributes, name,
                                 k_from=1,
                                 k_to=23,
                                 step=2,
@@ -135,8 +135,8 @@ def kNN_regression_k_comparison(train_data, ytarget, x_attributes, name,
     best_mrmse = np.infty
     x_steps = np.arange(k_from, k_to, step)
     for x in x_steps:
-        mrmse = kNN_crossvalidation(train_data=train_data, ytarget=ytarget, x_attributes=x_attributes,metric=metric,splits=splits,
-                                    k=x)
+        mrmse = knn_cross_validation(train_data=train_data, ytarget=ytarget, x_attributes=x_attributes, metric=metric, splits=splits,
+                                     k=x)
         if x == k_from:
             best_mrmse = mrmse
             best_k = x

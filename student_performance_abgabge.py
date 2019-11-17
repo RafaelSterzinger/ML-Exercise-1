@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from ridge_util import *
 from tree_util import *
 from knn_utils import *
+from utils import *
 from scipy import stats
 
 
@@ -148,57 +149,57 @@ decision_tree_comparison(train_data_encoded, target, attributes_names_tupels,
                          p_step=1)
 plt.show()
 # %% k Nearest Neighbour k comparison
-kNN_regression_k_comparison(train_data_encoded, target, numeric_attributes_student,"Euclidean: All numerical attributes",
+knn_regression_k_comparison(train_data_encoded, target, numeric_attributes_student, "Euclidean: All numerical attributes",
                             metric='euclidean')
-kNN_regression_k_comparison(train_data_encoded, target, numeric_attributes_student,"Minkowski: All numerical attributes",
+knn_regression_k_comparison(train_data_encoded, target, numeric_attributes_student, "Minkowski: All numerical attributes",
                             metric='minkowski')
-kNN_regression_k_comparison(train_data_encoded, target, numeric_attributes_student,"Manhattan: All numerical attributes",
+knn_regression_k_comparison(train_data_encoded, target, numeric_attributes_student, "Manhattan: All numerical attributes",
                             metric='manhattan')
 
-kNN_regression_k_comparison(train_data_encoded, target, top7_attributes_student,"Euclidean: Top 7 attributes by correlation",
+knn_regression_k_comparison(train_data_encoded, target, top7_attributes_student, "Euclidean: Top 7 attributes by correlation",
                             metric='euclidean')
-kNN_regression_k_comparison(train_data_encoded, target, top7_attributes_student,"Minkowski: Top 7 attributes by correlation",
+knn_regression_k_comparison(train_data_encoded, target, top7_attributes_student, "Minkowski: Top 7 attributes by correlation",
                             metric='minkowski')
-kNN_regression_k_comparison(train_data_encoded, target, top7_attributes_student,"Manhattan: Top 7 attributes by correlation",
+knn_regression_k_comparison(train_data_encoded, target, top7_attributes_student, "Manhattan: Top 7 attributes by correlation",
                             metric='manhattan')
 
-kNN_regression_k_comparison(train_data_encoded, target,
+knn_regression_k_comparison(train_data_encoded, target,
                             attr_own + attr_own_cat_after_preprocess + attr_own_bin,
                             "Attributes found through trial and error (OHE + BE)",
                             metric='euclidean')
-kNN_regression_k_comparison(train_data_encoded, target,
+knn_regression_k_comparison(train_data_encoded, target,
                             attr_own + attr_own_cat_after_preprocess + attr_own_bin,
                             "Attributes found through trial and error (OHE + BE)",
                             metric='minkowski')
-kNN_regression_k_comparison(train_data_encoded, target,
+knn_regression_k_comparison(train_data_encoded, target,
                             attr_own + attr_own_cat_after_preprocess + attr_own_bin,
                             "Attributes found through trial and error (OHE + BE)",
                             metric='manhattan')
 plt.show()
 
-kNN_regression_k_comparison(train_data_encoded_normalized, target, numeric_attributes_student,"Min-max|Euclidean: All numerical attributes",
+knn_regression_k_comparison(train_data_encoded_normalized, target, numeric_attributes_student, "Min-max|Euclidean: All numerical attributes",
                             metric='euclidean')
-kNN_regression_k_comparison(train_data_encoded_normalized, target, numeric_attributes_student,"Min-max|Minkowski: All numerical attributes",
+knn_regression_k_comparison(train_data_encoded_normalized, target, numeric_attributes_student, "Min-max|Minkowski: All numerical attributes",
                             metric='minkowski')
-kNN_regression_k_comparison(train_data_encoded_normalized, target, numeric_attributes_student,"Min-max|Manhattan: All numerical attributes",
+knn_regression_k_comparison(train_data_encoded_normalized, target, numeric_attributes_student, "Min-max|Manhattan: All numerical attributes",
                             metric='manhattan')
 
-kNN_regression_k_comparison(train_data_encoded_normalized, target, top7_attributes_student,"Min-max|Euclidean: Top 7 attributes by correlation",
+knn_regression_k_comparison(train_data_encoded_normalized, target, top7_attributes_student, "Min-max|Euclidean: Top 7 attributes by correlation",
                             metric='euclidean')
-kNN_regression_k_comparison(train_data_encoded_normalized, target, top7_attributes_student,"Min-max|Minkowski: Top 7 attributes by correlation",
+knn_regression_k_comparison(train_data_encoded_normalized, target, top7_attributes_student, "Min-max|Minkowski: Top 7 attributes by correlation",
                             metric='minkowski')
-kNN_regression_k_comparison(train_data_encoded_normalized, target, top7_attributes_student,"Min-max|Manhattan: Top 7 attributes by correlation",
+knn_regression_k_comparison(train_data_encoded_normalized, target, top7_attributes_student, "Min-max|Manhattan: Top 7 attributes by correlation",
                             metric='manhattan')
 
-kNN_regression_k_comparison(train_data_encoded_normalized, target,
+knn_regression_k_comparison(train_data_encoded_normalized, target,
                             attr_own + attr_own_cat_after_preprocess + attr_own_bin,
                             "Min-max|Euclidean: Attributes found through trial and error (OHE + BE)",
                             metric='euclidean')
-kNN_regression_k_comparison(train_data_encoded_normalized, target,
+knn_regression_k_comparison(train_data_encoded_normalized, target,
                             attr_own + attr_own_cat_after_preprocess + attr_own_bin,
                             "Min-max|Minkowski: Attributes found through trial and error (OHE + BE)",
                             metric='minkowski')
-kNN_regression_k_comparison(train_data_encoded_normalized, target,
+knn_regression_k_comparison(train_data_encoded_normalized, target,
                             attr_own + attr_own_cat_after_preprocess + attr_own_bin,
                             "Min-max|Manhattan: Attributes found through trial and error (OHE + BE)",
                             metric='manhattan')
@@ -206,22 +207,22 @@ kNN_regression_k_comparison(train_data_encoded_normalized, target,
 plt.show()
 
 # %% k Nearest Neighbour k comparison
-kNN_regression_k_comparison(train_data_encoded, target, numeric_attributes_student,"All numerical attributes",
+knn_regression_k_comparison(train_data_encoded, target, numeric_attributes_student, "All numerical attributes",
                             metric='euclidean')
 
-kNN_regression_k_comparison(train_data_encoded, target, top7_attributes_student,"Top 7 attributes by correlation",
+knn_regression_k_comparison(train_data_encoded, target, top7_attributes_student, "Top 7 attributes by correlation",
                             metric='euclidean')
-kNN_regression_k_comparison(train_data_encoded, target,
+knn_regression_k_comparison(train_data_encoded, target,
                             attr_own + attr_own_cat_after_preprocess + attr_own_bin,
                             "Attributes found through trial and error (OHE + BE)",
                             metric='euclidean')
 #plt.show()
 
-kNN_regression_k_comparison(train_data_encoded_normalized, target, numeric_attributes_student,"Min-max: All numerical attributes",
+knn_regression_k_comparison(train_data_encoded_normalized, target, numeric_attributes_student, "Min-max: All numerical attributes",
                             metric='euclidean')
-kNN_regression_k_comparison(train_data_encoded_normalized, target, top7_attributes_student,"Min-max: Top 7 attributes by correlation",
+knn_regression_k_comparison(train_data_encoded_normalized, target, top7_attributes_student, "Min-max: Top 7 attributes by correlation",
                             metric='euclidean')
-kNN_regression_k_comparison(train_data_encoded_normalized, target,
+knn_regression_k_comparison(train_data_encoded_normalized, target,
                             attr_own + attr_own_cat_after_preprocess + attr_own_bin,
                             "Min-max: Attributes found through trial and error (OHE + BE)",
                             metric='euclidean')
