@@ -155,3 +155,21 @@ find_best_rmse('with hr, temp, hum, season, weathersit and minkowski',x_train, y
 plt.savefig(path + "knn_selection_attributes.png")
 plt.ylabel("Root Mean Squared Error")
 plt.show()
+
+# %%
+knn_regression_k_comparison(train, target,
+                            number_features,
+                            "number",
+                            metric='minkowski')
+
+knn_regression_k_comparison(train, target,
+                            top4_attributes,
+                            "top4",
+                            metric='minkowski')
+
+knn_regression_k_comparison(train, target,
+                            category_features,
+                            "Attributes found through trial and error (OHE + BE)",
+                            metric='minkowski')
+
+plt.show()

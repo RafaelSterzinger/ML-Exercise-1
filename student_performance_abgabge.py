@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from ridge_util import *
 from tree_util import *
 from knn_utils import *
+from mlp_utils import *
 from utils import *
 from scipy import stats
 
@@ -28,6 +29,9 @@ attr_own = ["failures", "Medu", "studytime", "goout", "age", "freetime", "travel
 attr_own_cat_before_preprocss = ["Mjob", "Fjob"]                           # since Medu and Fedu were correlated we created some barplots to see if there could be a correlation job wise as well
 attr_own_cat_after_preprocess = ['Mjob_teacher', 'Mjob_health', 'Mjob_services', 'Mjob_at_home', 'Mjob_other'] + ['Fjob_teacher', 'Fjob_health', 'Fjob_services', 'Fjob_at_home', 'Fjob_other']
 attr_own_bin = ["higher", "internet"]
+
+attr_own_all = attr_own + attr_own_cat_after_preprocess + attr_own_bin
+
 
 attributes_names_tupels = [[numeric_attributes_student, 'All numeric attributes'],
                            [top7_attributes_student, '"Top 7 attributes by correlation"'],
@@ -261,4 +265,38 @@ find_best_rmse('Min:max with all attributes and minkowski',x_train, y_train, x_t
 
 #plt.savefig(path_student + "knn_all_attributes.png")
 #plt.ylabel("Root Mean Squared Error")
+plt.show()
+
+# %% MLP
+#correlated_columns = highest_correlated_data_as_list(data, 'Grade', 10)
+#correlated_columns.remove('Grade')
+
+numeric_attributes_student = ["age", "Medu", "Fedu", "traveltime", "studytime", "failures", "famrel", "freetime",
+                              "goout", "Dalc", "Walc", "health", "absences"]
+df = mlp_regression(train_data_encoded, attr_own_all, 'Grade', [(5, 7, 7), (7, 5, 5), (7, 7, 5, 3)], "logistic")
+
+df = pd.concat([df, mlp_regression(train_data_encoded, attr_own_all, 'Grade', [(5, 7, 7), (7, 5, 5), (7, 7, 5, 3)], "relu")])
+
+df = pd.concat([df, mlp_regression(train_data_encoded, attr_own_all, 'Grade', [(5, 7, 7), (7, 5, 5), (7, 7, 5, 3)], "tanh")])
+
+sns.catplot(x='Layers', y='RSME', hue='Activation',data = df, kind='bar')
+#df = pd.melt(df, id_vars="Layers", var_name="Activation", value_name="RSME")
+plt.ylim(2.5,5.5)
+plt.show()
+
+# %% MLP
+#correlated_columns = highest_correlated_data_as_list(data, 'Grade', 10)
+#correlated_columns.remove('Grade')
+
+numeric_attributes_student = ["age", "Medu", "Fedu", "traveltime", "studytime", "failures", "famrel", "freetime",
+                              "goout", "Dalc", "Walc", "health", "absences"]
+df = mlp_regression_layer_comparison(train_data_encoded, attr_own_all, 'Grade', [(5, 7, 7), (7, 5, 5), (7, 7, 5, 3)], "logistic")
+
+df = pd.concat([df, mlp_regression_layer_comparison(train_data_encoded, attr_own_all, 'Grade', [(5, 7, 7), (7, 5, 5), (7, 7, 5, 3)], "relu")])
+
+df = pd.concat([df, mlp_regression_layer_comparison(train_data_encoded, attr_own_all, 'Grade', [(5, 7, 7), (7, 5, 5), (7, 7, 5, 3)], "tanh")])
+
+sns.catplot(x='Layers', y='RSME', hue='Activation',data = df, kind='bar')
+#df = pd.melt(df, id_vars="Layers", var_name="Activation", value_name="RSME")
+plt.ylim(2.5,5.5)
 plt.show()

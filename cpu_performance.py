@@ -185,3 +185,16 @@ sns.catplot(x='Layers', y='RSME', hue='Activation',data = df, kind='bar')
 
 plt.show()
 # TODO: mit minmax skalierung
+
+# %% mlp comparision outlier cleansing, with top correlating
+models = [(5, 7, 7), (7, 5, 5), (7, 7, 5, 3)]
+df = mlp_regression_layer_comparison(train_data_out, ["MMIN", "MMAX", "CACH", "EPR"], 'EPR', models, "logistic")
+
+df = pd.concat([df, mlp_regression_layer_comparison(train_data_out, ["MMIN", "MMAX", "CACH", "EPR"], 'EPR', models, "relu")])
+
+df = pd.concat([df, mlp_regression_layer_comparison(train_data_out, ["MMIN", "MMAX", "CACH", "EPR"], 'EPR', models, "tanh")])
+
+sns.catplot(x='Layers', y='RSME', hue='Activation',data = df, kind='bar')
+
+plt.show()
+# TODO: mit minmax skalierung
