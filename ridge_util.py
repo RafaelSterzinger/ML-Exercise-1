@@ -55,7 +55,7 @@ def ridge_regression_crossvalidation(train, target, attr, alpha=1, splits=10):
     kf = KFold(n_splits=splits)
     kf.get_n_splits(train) # returns the number of splitting iterations in the cross-validatorprint(kf) KFold(n_splits=10, random_state=None, shuffle=False)
 
-    count = 1
+    count = 0
     sum_RMSE = 0
     for train_index, test_index in kf.split(train):
         #print("TRAIN:", train_index, "TEST:", test_index)

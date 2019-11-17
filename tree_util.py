@@ -8,14 +8,15 @@ import matplotlib.pyplot as plt
 def decision_tree(train_data, test_data, y_target, x_attributes,
                   min_samples_leaf=1, #evtl max_features
                   max_depth=None,
-                  criterion="mse"):
+                  criterion="mse",
+                  min_samples_split=2):
     train_x = train_data[x_attributes]
     train_y = train_data[y_target]
 
     test_x = test_data[x_attributes]
     test_y = test_data[y_target]
 
-    model = DecisionTreeRegressor(min_samples_leaf=min_samples_leaf, max_depth=max_depth, criterion=criterion)
+    model = DecisionTreeRegressor(min_samples_leaf=min_samples_leaf, max_depth=max_depth, criterion=criterion, min_samples_split=min_samples_split)
     model.fit(train_x, train_y)
 
     predict_test = model.predict(test_x)
@@ -30,11 +31,12 @@ def decision_tree_crossvalidation(train_data, ytarget, x_attributes,
                                   criterion = 'mse',
                                   min_samples_leaf=1,
                                   splits=10,
-                                  max_depth=None):
+                                  max_depth=None,
+                                  min_samples_split=2):
     kf = KFold(n_splits=splits)
     kf.get_n_splits(train_data) # returns the number of splitting iterations in the cross-validatorprint(kf) KFold(n_splits=10, random_state=None, shuffle=False)
 
-    count = 1
+    count = 0
     sum_RMSE = 0
     for train_index, test_index in kf.split(train_data):
         #print("TRAIN:", train_index, "TEST:", test_index)
@@ -42,7 +44,8 @@ def decision_tree_crossvalidation(train_data, ytarget, x_attributes,
         sum_RMSE = sum_RMSE + decision_tree(train_data=train_data.drop(test_index),test_data=train_data.drop(train_index),y_target=ytarget,x_attributes=x_attributes,
                                             min_samples_leaf=min_samples_leaf,
                                             max_depth=max_depth,
-                                            criterion=criterion)
+                                            criterion=criterion,
+                                            min_samples_split=min_samples_split)
         count = count + 1
 
     mean_root_mean_squared_error = sum_RMSE/count
@@ -112,7 +115,9 @@ def decision_tree_regression_max_depth_comparison(train_data, ytarget, x_attribu
 
 def decision_tree_comparison(train_data, ytarget, x_attributes_tupels_list,
                              comp_type,
-                             max_depth_from, max_depth_to, step,
+                             #max_depth_from, max_depth_to, max_depth_step,
+                             #min_samples_leaf_from,min_samples_leaf_to, min_samples_leaf_step,
+                             p_from, p_to, p_step,
                              criterion='mse',
                              plot=True, splits=10, min_samples_leaf=1):
     if (comp_type == 'criterion'):
@@ -122,8 +127,85 @@ def decision_tree_comparison(train_data, ytarget, x_attributes_tupels_list,
     elif(comp_type == 'max_depth'):
         for x_attributes in x_attributes_tupels_list:
             decision_tree_regression_max_depth_comparison(train_data, ytarget, x_attributes[0], x_attributes[1],
-                                                          max_depth_from,
-                                                          max_depth_to,
-                                                          step)
+                                                          p_from, p_to, p_step)
+                                                          #max_depth_from,
+                                                          #max_depth_to,
+                                                          #max_depth_step)
+    elif(comp_type == 'min_samples_leaf'):
+        for x_attributes in x_attributes_tupels_list:
+            decision_tree_regression_min_samples_leaf_comparison(train_data, ytarget, x_attributes[0], x_attributes[1],
+                                                                 p_from, p_to, p_step)
+                                                                 #min_samples_leaf_from,
+                                                                 #min_samples_leaf_to,
 
+    elif (comp_type == 'min_samples_split'):
+        for x_attributes in x_attributes_tupels_list:
+            decision_tree_regression_min_samples_split_comparison(train_data, ytarget, x_attributes[0],
+                                                                  x_attributes[1],
+                                                                  p_from, p_to, p_step)
+                #min_samples_leaf_step)
     plt.show        #todo funkt nicht
+
+
+#todo verschieden Hyperparameter ineinander verschachteln und das beste zurück geben
+def decision_tree_regression_min_samples_leaf_comparison(train_data, ytarget, x_attributes, name,
+                                                  min_samples_leaf_from,
+                                                  min_samples_leaf_to,
+                                                  step,
+                                                  plot=True, splits=10,criterion='mse',max_depth=None):
+    mrmse_val = []
+    best_mrmse = np.infty
+    x_steps = np.arange(min_samples_leaf_from, min_samples_leaf_to, step)
+    for x in x_steps:
+        mrmse = decision_tree_crossvalidation(train_data=train_data, ytarget=ytarget, x_attributes=x_attributes,
+                                              criterion=criterion,splits=splits, max_depth=max_depth,
+                                              min_samples_leaf=x)
+        if x == min_samples_leaf_from:
+            best_mrmse = mrmse
+            best_min_samples_leaf = x
+        elif mrmse < best_mrmse:
+            best_mrmse = mrmse
+            best_min_samples_leaf = x
+
+        mrmse_val.append(mrmse)  # store rmse values
+
+    if plot:
+        plt.plot(x_steps, mrmse_val[0:len(mrmse_val)] , '--', label=name)
+        plt.xticks(x_steps)
+        plt.xlabel('min_samples_leaf')
+        plt.ylabel('rmse')
+        plt.scatter(best_min_samples_leaf, best_mrmse)
+        plt.legend()
+
+    return best_mrmse, best_min_samples_leaf
+
+def decision_tree_regression_min_samples_split_comparison(train_data, ytarget, x_attributes, name,
+                                                          min_samples_split_from,
+                                                          min_samples_split_to,
+                                                          step,
+                                                          plot=True, splits=10, criterion='mse', max_depth=None):
+    mrmse_val = []
+    best_mrmse = np.infty
+    x_steps = np.arange(min_samples_split_from, min_samples_split_to, step)
+    for x in x_steps:
+        mrmse = decision_tree_crossvalidation(train_data=train_data, ytarget=ytarget, x_attributes=x_attributes,
+                                              criterion=criterion,splits=splits, max_depth=max_depth,
+                                              min_samples_split=x)
+        if x == min_samples_split_from:
+            best_mrmse = mrmse
+            best_min_samples_split = x
+        elif mrmse < best_mrmse:
+            best_mrmse = mrmse
+            best_min_samples_split = x
+
+        mrmse_val.append(mrmse)  # store rmse values
+
+    if plot:
+        plt.plot(x_steps, mrmse_val[0:len(mrmse_val)] , '--', label=name)
+        plt.xticks(x_steps)
+        plt.xlabel('min_samples_split')
+        plt.ylabel('rmse')
+        plt.scatter(best_min_samples_split, best_mrmse)
+        plt.legend()
+
+    return best_mrmse, best_min_samples_split
