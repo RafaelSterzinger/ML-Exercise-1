@@ -86,7 +86,14 @@ ridge_regression_alpha_comparison(train_data_encoded_normalized, target,
 
 plt.show()
 
-# %% min samples depth
+# %% min depth comparison
+decision_tree_comparison(train_data_encoded, target, attributes_names_tupels,
+                         comp_type='max_depth',
+                         p_from=1,
+                         p_to=30,
+                         p_step=2)
+plt.show()
+
 # %% criterion comparison -> we will keep using mse
 decision_tree_regression_criterion_comparison(train_data_encoded, target,
                                   numeric_attributes_student,
@@ -139,4 +146,118 @@ decision_tree_comparison(train_data_encoded, target, attributes_names_tupels,
                          p_from=2,
                          p_to=30,       #bei 25 konstante Tiefe
                          p_step=1)
+plt.show()
+# %% k Nearest Neighbour k comparison
+kNN_regression_k_comparison(train_data_encoded, target, numeric_attributes_student,"Euclidean: All numerical attributes",
+                            metric='euclidean')
+kNN_regression_k_comparison(train_data_encoded, target, numeric_attributes_student,"Minkowski: All numerical attributes",
+                            metric='minkowski')
+kNN_regression_k_comparison(train_data_encoded, target, numeric_attributes_student,"Manhattan: All numerical attributes",
+                            metric='manhattan')
+
+kNN_regression_k_comparison(train_data_encoded, target, top7_attributes_student,"Euclidean: Top 7 attributes by correlation",
+                            metric='euclidean')
+kNN_regression_k_comparison(train_data_encoded, target, top7_attributes_student,"Minkowski: Top 7 attributes by correlation",
+                            metric='minkowski')
+kNN_regression_k_comparison(train_data_encoded, target, top7_attributes_student,"Manhattan: Top 7 attributes by correlation",
+                            metric='manhattan')
+
+kNN_regression_k_comparison(train_data_encoded, target,
+                            attr_own + attr_own_cat_after_preprocess + attr_own_bin,
+                            "Attributes found through trial and error (OHE + BE)",
+                            metric='euclidean')
+kNN_regression_k_comparison(train_data_encoded, target,
+                            attr_own + attr_own_cat_after_preprocess + attr_own_bin,
+                            "Attributes found through trial and error (OHE + BE)",
+                            metric='minkowski')
+kNN_regression_k_comparison(train_data_encoded, target,
+                            attr_own + attr_own_cat_after_preprocess + attr_own_bin,
+                            "Attributes found through trial and error (OHE + BE)",
+                            metric='manhattan')
+plt.show()
+
+kNN_regression_k_comparison(train_data_encoded_normalized, target, numeric_attributes_student,"Min-max|Euclidean: All numerical attributes",
+                            metric='euclidean')
+kNN_regression_k_comparison(train_data_encoded_normalized, target, numeric_attributes_student,"Min-max|Minkowski: All numerical attributes",
+                            metric='minkowski')
+kNN_regression_k_comparison(train_data_encoded_normalized, target, numeric_attributes_student,"Min-max|Manhattan: All numerical attributes",
+                            metric='manhattan')
+
+kNN_regression_k_comparison(train_data_encoded_normalized, target, top7_attributes_student,"Min-max|Euclidean: Top 7 attributes by correlation",
+                            metric='euclidean')
+kNN_regression_k_comparison(train_data_encoded_normalized, target, top7_attributes_student,"Min-max|Minkowski: Top 7 attributes by correlation",
+                            metric='minkowski')
+kNN_regression_k_comparison(train_data_encoded_normalized, target, top7_attributes_student,"Min-max|Manhattan: Top 7 attributes by correlation",
+                            metric='manhattan')
+
+kNN_regression_k_comparison(train_data_encoded_normalized, target,
+                            attr_own + attr_own_cat_after_preprocess + attr_own_bin,
+                            "Min-max|Euclidean: Attributes found through trial and error (OHE + BE)",
+                            metric='euclidean')
+kNN_regression_k_comparison(train_data_encoded_normalized, target,
+                            attr_own + attr_own_cat_after_preprocess + attr_own_bin,
+                            "Min-max|Minkowski: Attributes found through trial and error (OHE + BE)",
+                            metric='minkowski')
+kNN_regression_k_comparison(train_data_encoded_normalized, target,
+                            attr_own + attr_own_cat_after_preprocess + attr_own_bin,
+                            "Min-max|Manhattan: Attributes found through trial and error (OHE + BE)",
+                            metric='manhattan')
+
+plt.show()
+
+# %% k Nearest Neighbour k comparison
+kNN_regression_k_comparison(train_data_encoded, target, numeric_attributes_student,"All numerical attributes",
+                            metric='euclidean')
+
+kNN_regression_k_comparison(train_data_encoded, target, top7_attributes_student,"Top 7 attributes by correlation",
+                            metric='euclidean')
+kNN_regression_k_comparison(train_data_encoded, target,
+                            attr_own + attr_own_cat_after_preprocess + attr_own_bin,
+                            "Attributes found through trial and error (OHE + BE)",
+                            metric='euclidean')
+#plt.show()
+
+kNN_regression_k_comparison(train_data_encoded_normalized, target, numeric_attributes_student,"Min-max: All numerical attributes",
+                            metric='euclidean')
+kNN_regression_k_comparison(train_data_encoded_normalized, target, top7_attributes_student,"Min-max: Top 7 attributes by correlation",
+                            metric='euclidean')
+kNN_regression_k_comparison(train_data_encoded_normalized, target,
+                            attr_own + attr_own_cat_after_preprocess + attr_own_bin,
+                            "Min-max: Attributes found through trial and error (OHE + BE)",
+                            metric='euclidean')
+
+plt.show()
+
+
+#%% knn with different distances
+workaroudn = attr_own + attr_own_cat_after_preprocess + attr_own_bin + target
+trimmed_data = train_data_encoded[workaroudn]
+x_train, y_train, x_test, y_test = make_split(trimmed_data,'Grade')
+find_best_rmse('with all numeric and euclidean',
+               x_train, y_train, x_test, y_test)
+
+
+find_best_rmse('with all numeric manhatten',
+               x_train, y_train, x_test, y_test,metric='manhattan')
+
+find_best_rmse('with all attributes and minkowski',x_train, y_train, x_test, y_test,metric="minkowski")
+
+#plt.savefig(path_student + "knn_all_attributes.png")
+#plt.ylabel("Root Mean Squared Error")
+#plt.show()
+
+trimmed_data = train_data_encoded_normalized[workaroudn]
+x_train, y_train, x_test, y_test = make_split(trimmed_data,'Grade')
+find_best_rmse('Min:max with all numeric and euclidean',
+               x_train, y_train, x_test, y_test)
+
+x_train, y_train, x_test, y_test = make_split(trimmed_data,'Grade')
+find_best_rmse('Min:max with all numeric manhatten',
+               x_train, y_train, x_test, y_test,metric='manhattan')
+
+x_train, y_train, x_test, y_test = make_split(trimmed_data,'Grade')
+find_best_rmse('Min:max with all attributes and minkowski',x_train, y_train, x_test, y_test,metric="minkowski")
+
+#plt.savefig(path_student + "knn_all_attributes.png")
+#plt.ylabel("Root Mean Squared Error")
 plt.show()
