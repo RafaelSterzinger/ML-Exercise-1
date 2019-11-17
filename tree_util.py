@@ -32,7 +32,7 @@ def decision_tree_crossvalidation(train_data, ytarget, x_attributes,
                                   min_samples_leaf=1,
                                   splits=10,
                                   max_depth=None,
-                                  min_samples_split=2):
+                                  min_samples_split=10):
     kf = KFold(n_splits=splits)
     kf.get_n_splits(train_data) # returns the number of splitting iterations in the cross-validatorprint(kf) KFold(n_splits=10, random_state=None, shuffle=False)
 

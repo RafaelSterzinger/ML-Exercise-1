@@ -195,20 +195,20 @@ plt.show()
 data = train_data_student
 
 trimmed_data = trim_data(data,['dteday'])
-x_train, y_train, x_test, y_test = create_cross_validation(trimmed_data,'cnt')
+x_train, y_train, x_test, y_test = make_split(trimmed_data, 'cnt')
 find_best_rmse('with all attributes + id and euclidean',
                x_train, y_train, x_test, y_test)
 
 trimmed_data = trim_data(trimmed_data,['id'])
 
-x_train, y_train, x_test, y_test = create_cross_validation(trimmed_data,'cnt')
+x_train, y_train, x_test, y_test = make_split(trimmed_data, 'cnt')
 find_best_rmse('with all attributes and manhatten',
                x_train, y_train, x_test, y_test,metric='manhattan')
 
-x_train, y_train, x_test, y_test = create_cross_validation(trimmed_data,'cnt')
+x_train, y_train, x_test, y_test = make_split(trimmed_data, 'cnt')
 find_best_rmse('with all attributes and euclidean',x_train, y_train, x_test, y_test)
 
-x_train, y_train, x_test, y_test = create_cross_validation(trimmed_data,'cnt')
+x_train, y_train, x_test, y_test = make_split(trimmed_data, 'cnt')
 find_best_rmse('with all attributes and minkowski',x_train, y_train, x_test, y_test,metric="minkowski")
 
 plt.savefig(path_student + "knn_all_attributes.png")
@@ -218,16 +218,16 @@ plt.show()
 #%% knn with different distances
 workaroudn = numeric_attributes_student + [target_attribute_student]
 trimmed_data = train_data_student[workaroudn]
-x_train, y_train, x_test, y_test = create_cross_validation(trimmed_data,'Grade')
+x_train, y_train, x_test, y_test = make_split(trimmed_data, 'Grade')
 find_best_rmse('with all numeric euclidean',
                x_train, y_train, x_test, y_test)
 
 
-x_train, y_train, x_test, y_test = create_cross_validation(trimmed_data,'Grade')
+x_train, y_train, x_test, y_test = make_split(trimmed_data, 'Grade')
 find_best_rmse('with all numeric manhatten',
                x_train, y_train, x_test, y_test,metric='manhattan')
 
-x_train, y_train, x_test, y_test = create_cross_validation(trimmed_data,'Grade')
+x_train, y_train, x_test, y_test = make_split(trimmed_data, 'Grade')
 find_best_rmse('with all attributes and minkowski',x_train, y_train, x_test, y_test,metric="minkowski")
 
 plt.savefig(path_student + "knn_all_attributes.png")

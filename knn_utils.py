@@ -36,7 +36,7 @@ def trim_data(data, attributes):
     return data.drop(attributes, axis=1)
 
 
-def create_cross_validation(data, target, test_size=0.3):
+def make_split(data, target, test_size=0.3):
     """ create train and test set """
     train, test = train_test_split(data, test_size=test_size)
     x_train = train.drop(target, axis=1)

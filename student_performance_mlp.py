@@ -17,7 +17,5 @@ data = pd.read_csv('datasets/student_performance/StudentPerformance.shuf.train.c
 correlated_columns=highest_correlated_data_as_list(data,'Grade',10)
 correlated_columns.remove('Grade')
 
-train, test = train_test_split(data, test_size=0.3)
-rmse, model = mlp(train, test, 'Grade', correlated_columns)
-plot_loss(model)
-plt.show()
+numeric_attributes_student = ["age", "Medu", "Fedu", "traveltime", "studytime", "failures", "famrel", "freetime", "goout", "Dalc", "Walc", "health", "absences"]
+mlp_regression_neu(data,numeric_attributes_student, 'Grade', [(7,),(5,),(1,)],"logistic")
