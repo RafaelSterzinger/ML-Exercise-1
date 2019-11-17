@@ -12,9 +12,9 @@ import matplotlib.pyplot as plt
 
 def mlp(train_data, test_data, target, attributes=None):
     if attributes is None:
-        train_x = train_data.drop[target]
+        train_x = train_data.drop(target, axis=1)
         train_y = train_data[target]
-        test_x = test_data.drop[target]
+        test_x = test_data.drop(target, axis=1)
         test_y = test_data[target]
     else:
         train_x = train_data[attributes]
