@@ -53,6 +53,15 @@ def scale_min_max(data):
                                          columns=data.columns)
     return x_train_minmax_scaled
 
+def scale_min_max_without_target(data, target):
+    """ scaling features with MinMax """
+    data_wo_target = data.drop(target, axis = 1)
+    minmax_scaler = MinMaxScaler(feature_range=(0, 1))
+    x_train_minmax_scaled = pd.DataFrame(minmax_scaler.fit_transform(data_wo_target), index=data.index,
+                                         columns=data_wo_target.columns)
+    x_train_minmax_scaled[target] = data[target]
+    return x_train_minmax_scaled
+
 
 def scale_standard(data):
     """ scaling features with zscore """

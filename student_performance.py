@@ -1,7 +1,6 @@
 #%% import
 import pandas as pd
 import seaborn as sns
-from matplotlib import pyplot
 import numpy as np
 import matplotlib.pyplot as plt
 from ridge_util import *
@@ -16,10 +15,23 @@ target_attribute_student = "Grade"
 numeric_attributes_student = ["age", "Medu", "Fedu", "traveltime", "studytime", "failures", "famrel", "freetime", "goout", "Dalc", "Walc", "health", "absences"]
 other_attributes_student = ["failures", "Medu","studytime", "goout", "age", "freetime",   "Fedu", "absences"]           #schneidet am besten ab bis jetzt
 top7_attributes_student =  ["failures", "Medu","studytime", "goout", "age", "traveltime", "Fedu"]
-all_attributes_tupels_list = [[numeric_attributes_student, 'Numeric attributes'], [other_attributes_student, 'Other attributes'], [top7_attributes_student, 'Top 7 attributes']]
 
+attributes_with_categorical = ["failures", "Medu","studytime", "goout", "age", "freetime", "traveltime", "Fedu", "absences"]
 #one hot encoding & Ordinal Encoding
+#todo
+attr_own = ["failures", "Medu", "studytime", "goout", "age", "freetime", "traveltime", "Fedu", "absences"]
+attr_own_cat_before_preprocss = ["Mjob", "Fjob"]                           # since Medu and Fedu were correlated we created some barplots to see if there could be a correlation job wise as well
+attr_own_cat_after_preprocess = ['Mjob_teacher', 'Mjob_health', 'Mjob_services', 'Mjob_at_home', 'Mjob_other'] + ['Fjob_teacher', 'Fjob_health', 'Fjob_services', 'Fjob_at_home', 'Fjob_other']
 
+
+
+attr_own_bin = ["higher", "internet"]
+    # allgemein bekannt / own + uprising (education + parents job)
+    # Unterschied family influence
+    # Unterschied friends influence Dalc, walc
+
+
+all_attributes_tupels_list = [[attributes_with_categorical, 'ATTR with cat'],[numeric_attributes_student, 'Numeric attributes'], [other_attributes_student, 'Other attributes'], [top7_attributes_student, 'Top 7 attributes']]
 # lots of categories -> Binary encoding
 
 #1, 2, 3, 6, 7, 8, 13, 14, 15, 21, 22, 30 , 31, 32, 33
@@ -38,7 +50,7 @@ test_label_student = pd.read_csv("datasets/student_performance/StudentPerformanc
 #%% Vizualisation Check for missing values
 print(train_data_student.isnull().sum())
 
-fig, ax = pyplot.subplots(figsize=(6, 6))
+fig, ax = plt.subplots(figsize=(6, 6))
 
 # Histogram of target value
 plot = sns.distplot(train_data_student[target_attribute_student], ax=ax).get_figure()
@@ -47,7 +59,8 @@ plot.savefig(path_student + data_initials_student + "hist1.png")
 # Heatmap to check correlation
 correlation_matrix = train_data_student.corr().round(2).abs()
 cnt_corr = correlation_matrix["Grade"]#.nlargest(10)
-print("8 largest correlations", cnt_corr)
+
+print("8 largest correlations", cnt_corr.nlargest(10))
 
 plot = sns.heatmap(correlation_matrix, ax=ax, linewidths=.5, annot=True).get_figure()
 plot.savefig(path_student + data_initials_student + "heatmap.png")
@@ -61,13 +74,15 @@ pairplot_student.savefig(path_student + data_initials_student + "pairplot_numeri
 #plt.figure(figsize=(10,6))
 # positive correlation if parent is teacher, negative if stay at home
 boxplot_student_father = sns.boxplot(x = train_data_student["Fjob"], y=train_data_student[target_attribute_student])
-boxplot_student_father.savefig(path_student + data_initials_student + "boxplot_father.png")
+plt.show()
+boxplot_student_father.figure.savefig(path_student + data_initials_student + "boxplot_father.png")
 boxplot_student_mother = sns.boxplot(x = train_data_student["Mjob"], y=train_data_student[target_attribute_student])
-boxplot_student_mother.savefig(path_student + data_initials_student + "boxplot_mother.png")
+plt.show()
+boxplot_student_mother.figure.savefig(path_student + data_initials_student + "boxplot_mother.png")
 
 # females get better grades
 boxplot_student_gender = sns.boxplot(x = train_data_student["sex"], y = train_data_student[target_attribute_student])
-boxplot_student_gender.savefig(path_student + data_initials_student + "boxplot_gender.png")
+boxplot_student_gender.figure.savefig(path_student + data_initials_student + "boxplot_gender.png")
 '''
 #%% Gradient Boosting Classifier
 def gradient_boosting_classifier(train_data, test_data, test_label):
@@ -116,18 +131,19 @@ def gradient_boosting_classifier(train_data, test_data, test_label):
     accuracy_test = accuracy_score(test_y,predict_test)
     print('\naccuracy_score on test dataset : ', accuracy_test)
 '''
-#%% transform categorical into numerical/dummy variables
-# only True or False -> Point Biserial Correlation
+#%% transform categorical into numerical/dummy variables only True or False -> Point Biserial Correlation
 train_data_student_binary_encoded = train_data_student#[[target_attribute_student, 'higher']]
-#higher_education['higher'] = (higher_education['higher'] == 'yes').astype(int)
-#higher_education.assign(Grade = train_data_student[target_attribute_student])
 for i in range(len(binary_tupels)):
     train_data_student_binary_encoded[binary_tupels[i][0]] = (train_data_student_binary_encoded[binary_tupels[i][0]] == binary_tupels[i][1] ).astype(int)
 # multiple variables -> ANOVA (analysis of variance) the higher the F score the higher the correlation
 
 correlation_matrix_binary = train_data_student_binary_encoded[binary_attributes_and_target].corr().round(2).abs()
-bin_corr = correlation_matrix_binary[target_attribute_student].nlargest(13)
+bin_corr = correlation_matrix_binary[target_attribute_student].nlargest(5)
 
+fig, ax = plt.subplots(figsize=(6, 6))
+
+plot = sns.heatmap(correlation_matrix_binary, ax=ax, linewidths=.5, annot=True).get_figure()
+plt.show()
 print("higher education corr", bin_corr)
 
 # create categories
@@ -151,6 +167,12 @@ ridge_regression_alpha_comparison(train_data_student, target_attribute_student,
                                   top7_attributes_student,
                                   0, 50, 5,
                                   "Top 7 attributes")
+
+
+ridge_regression_alpha_comparison(train_data_student, target_attribute_student,
+                                  attributes_with_categorical,
+                                  0, 50, 5,
+                                  "Attr with cate")
 plt.show()
 
 #%% Student performance decision tree regression criterion comparison
@@ -180,43 +202,72 @@ decision_tree_comparison(train_data_student, target_attribute_student, all_attri
 plt.show()
 print("done")
 
-#%%
-decision_tree_crossvalidation(train_data_student, test_data_student, target_attribute_student, nominal_attributes)
 
-#%% Bike sharing decision tree regression max_depth comparison
+#%% Student performance decision tree regression max_depth comparison
 decision_tree_comparison(train_data_student, target_attribute_student,all_attributes_tupels_list,
-                         comp_type='max_depth',
+                         comp_type='min_samples_leaf',
                          p_from=1,
                          p_to=10,       #bei 25 konstante Tiefe
                          p_step=1)
 plt.show()
 
 #%% knn with different distances
-data = train_data_student
-
-trimmed_data = trim_data(data,['dteday'])
-x_train, y_train, x_test, y_test = make_split(trimmed_data, 'cnt')
-find_best_rmse('with all attributes + id and euclidean',
+workaroudn = numeric_attributes_student + [target_attribute_student]
+trimmed_data = train_data_student[workaroudn]
+x_train, y_train, x_test, y_test = make_split(trimmed_data,'Grade')
+find_best_rmse('with all numeric and euclidean',
                x_train, y_train, x_test, y_test)
 
-trimmed_data = trim_data(trimmed_data,['id'])
 
-x_train, y_train, x_test, y_test = make_split(trimmed_data, 'cnt')
-find_best_rmse('with all attributes and manhatten',
+x_train, y_train, x_test, y_test = make_split(trimmed_data,'Grade')
+find_best_rmse('with all numeric manhatten',
                x_train, y_train, x_test, y_test,metric='manhattan')
 
-x_train, y_train, x_test, y_test = make_split(trimmed_data, 'cnt')
-find_best_rmse('with all attributes and euclidean',x_train, y_train, x_test, y_test)
-
-x_train, y_train, x_test, y_test = make_split(trimmed_data, 'cnt')
+x_train, y_train, x_test, y_test = make_split(trimmed_data,'Grade')
 find_best_rmse('with all attributes and minkowski',x_train, y_train, x_test, y_test,metric="minkowski")
 
 plt.savefig(path_student + "knn_all_attributes.png")
 plt.ylabel("Root Mean Squared Error")
 plt.show()
 
-#%% knn with different distances
-workaroudn = numeric_attributes_student + [target_attribute_student]
+# %%
+
+attr_own = ["failures", "Medu", "studytime", "goout", "age", "freetime", "traveltime", "Fedu", "absences"]
+attr_own_cat_before_preprocss = ["Mjob", "Fjob"]                           # since Medu and Fedu were correlated we created some barplots to see if there could be a correlation job wise as well
+attr_own_cat_after_preprocess = ['Mjob_teacher', 'Mjob_health', 'Mjob_services', 'Mjob_at_home', 'Mjob_other'] + ['Fjob_teacher', 'Fjob_health', 'Fjob_services', 'Fjob_at_home', 'Fjob_other']
+
+
+attr_own_bin = ["higher", "internet"]
+
+#train_data_encoded = train_data_student #
+train_data_encoded= pd.get_dummies(train_data_student, columns=attr_own_cat_before_preprocss)
+
+for bin_attr in attr_own_bin:
+    train_data_encoded[bin_attr] = (train_data_encoded[bin_attr] == 'Yes' ).astype(int)
+all_attributes_tupels_list_with_cat = [[attributes_with_categorical, 'ATTR with cat'],[numeric_attributes_student, 'Numeric attributes'], [other_attributes_student, 'Other attributes'],
+                              [top7_attributes_student, 'Top 7 attributes'],
+                              #[attr_own + attr_own_bin, 'WITH bin']]
+                              [attr_own + attr_own_cat_after_preprocess, 'WITH cat']]
+
+
+decision_tree_comparison(train_data_encoded, target_attribute_student,all_attributes_tupels_list_with_cat,
+                         comp_type='min_samples_leaf',
+                         p_from=1,
+                         p_to=10,       #bei 25 konstante Tiefe
+                         p_step=1)
+plt.show()
+
+
+decision_tree_comparison(train_data_encoded, target_attribute_student, all_attributes_tupels_list_with_cat,
+                         comp_type='max_depth',
+                         p_from=1,
+                         p_to=10,
+                         p_step=1)
+plt.show()
+
+#todo preprocess standardize
+
+workaroudn = attr_own + attr_own_bin + [target_attribute_student]
 trimmed_data = train_data_student[workaroudn]
 x_train, y_train, x_test, y_test = make_split(trimmed_data, 'Grade')
 find_best_rmse('with all numeric euclidean',
@@ -233,3 +284,5 @@ find_best_rmse('with all attributes and minkowski',x_train, y_train, x_test, y_t
 plt.savefig(path_student + "knn_all_attributes.png")
 plt.ylabel("Root Mean Squared Error")
 plt.show()
+
+print("done")
