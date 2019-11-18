@@ -150,19 +150,74 @@ plt.ylabel("Root Mean Squared Error")
 plt.savefig(path + "knn_correlation_regression.png")
 plt.show()
 
-#%% make hr circular
+#%% make hr circular, with hr, temp, hum, season, weathersit
 train = pd.read_csv("datasets/bike_sharing/bikeSharing.shuf.train.csv", skipinitialspace=True)
 train.columns = train.columns.str.strip()
-hr = np.sin(2*np.pi*train["hr"]/24)
-train_hr = train
-train_hr['hr'] = hr
 
-x_train, y_train, x_test, y_test = make_split(train[["hr", "hum", "season", "weathersit", "temp", "cnt"]], 'cnt')
-find_best_rmse('with hr, temp, hum, season, weathersit and manhatten',x_train, y_train, x_test, y_test, metric="manhattan")
-find_best_rmse('with hr, temp, hum, season, weathersit and euclidean',x_train, y_train, x_test, y_test)
+x_train, y_train, x_test, y_test = make_split(train[["hr", "hum","season", "temp", "cnt"]], 'cnt')
+find_best_rmse('with hr and manhatten',x_train, y_train, x_test, y_test, metric="manhattan")
+find_best_rmse('with hr weathersit and euclidean',x_train, y_train, x_test, y_test)
+
+train_hr = train
+hr_sin = np.sin(2*np.pi*train["hr"]/24)
+hr_cos = np.cos(2*np.pi*train["hr"]/24)
+hour = pd.DataFrame({'hr_sin': hr_sin, 'hr_cos':hr_cos})
+train_hr=pd.concat([train_hr, hour],axis=1)
+
+x_train, y_train, x_test, y_test = make_split(train_hr[["hr_sin","hr_cos", "hum","season", "temp", "cnt"]], 'cnt')
+find_best_rmse('with hr circular and manhatten',x_train, y_train, x_test, y_test, metric="manhattan")
+find_best_rmse('with hr circular weathersit and euclidean',x_train, y_train, x_test, y_test)
 
 plt.ylabel("Root Mean Squared Error")
 plt.savefig(path + "knn_circular_time_regression.png")
 plt.show()
 
-#%% log transform
+hour.plot.scatter('hr_sin','hr_cos').set_aspect('equal')
+plt.savefig(path + "sin_cos_visualization")
+plt.show()
+
+#%% sqrt transform
+sns.distplot(np.sqrt(np.sqrt(train['cnt']))).get_figure()
+plt.xlabel("Amount of shared bikes")
+plt.ylabel("Square Square Root of Count")
+plt.savefig(path + "hist2.png")
+plt.show()
+
+#%%
+train = train.drop(['id','dteday'],axis =1)
+train = train.transform(func = ['sqrt'])
+result = train.transform(func = ['sqrt'])
+
+#%% Bike sharing decision tree regression max_depth comparison
+decision_tree_comparison(train, target,all_attributes_tupels_list,
+                         comp_type='max_depth',
+                         p_from=1,
+                         p_to=30,       #bei 25 konstante Tiefe
+                         p_step=2)
+plt.savefig(path + "tree_regression_transformed.png")
+plt.show()
+
+# %% MLP Encoded data Normalized -> Logistik unbeeinflusst -> andere schlechter!
+models = [(12, 12, 12), (12, 24, 12), (12, 20, 16, 14)]
+
+df = mlp_regression(train, number_features+category_features, 'cnt', models, "logistic")
+
+df = pd.concat([df, mlp_regression(train, number_features+category_features, 'cnt', models, "relu")])
+
+df = pd.concat([df, mlp_regression(train, number_features+category_features, 'cnt', models, "tanh")])
+
+sns.catplot(x='Layers', y='RMSE', hue='Activation',data = df, kind='bar')
+plt.savefig(path + "mlp_regression_transformed.png")
+plt.show()
+
+#%%
+
+from sklearn import neighbors
+x_train, y_train, x_test, y_test = make_split(train, 'cnt')
+
+find_best_rmse('with all attributes and minkowski',
+               x_train, y_train, x_test, y_test, metric="minkowski")
+
+plt.ylabel("Root Mean Squared Error")
+plt.savefig(path + "knn_all_attributes_transformed.png")
+plt.show()
