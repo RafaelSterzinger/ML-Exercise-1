@@ -74,54 +74,120 @@
 \end{minipage}
 \end{frame}
 
-\begin{frame}
-\frametitle{Bike Sharing }
-\begin{minipage}{1\textwidth}
-	\center 
-	\includegraphics[width=1.0\textwidth]{plots/bike_sharing/heatmap_numerical.png}
-\end{minipage}
-\begin{minipage}{1\textwidth}
-	\center 
-	\includegraphics[width=1.0\textwidth]{plots/bike_sharing/heatmap_numerical.png}
-\end{minipage}
-\end{frame}
-
-\begin{frame}
-\frametitle{Bike Sharing numerical Attribute comparison}
+\begin{frame}{}
+\frametitle{Student Performance Correlation}
 \begin{minipage}{0.3\textwidth}
-	
+\begin{itemize}
+\item Correlation of numerical values
+\item atemp correlates too strong with temp
+\end{itemize}
 \end{minipage}
 \begin{minipage}{0.69\textwidth}
-	\center Heatmap
-	\includegraphics[width=0.5\textwidth]{plots/bike_sharing/hour_boxplot.png}
+	\center Heatmap of numerical values
+    \includegraphics[width=1.0\textwidth]{plots/bike_sharing/heatmap_numerical.png}
 \end{minipage}
 \end{frame}
 
+
+
 \begin{frame}
-\frametitle{Bike Sharing numerical Attribute comparison}
-\center Heatmap
-\begin{minipage}{1\textwidth}
-	\center 
+\frametitle{Bike Sharing hour Attribute}
+\begin{minipage}{0.3\textwidth}
+	\begin{itemize}
+	\item Hours give a lot of information
+	\item Correlated with $\approx$ 0.4
+	\end{itemize}
+\end{minipage}
+\begin{minipage}{0.69\textwidth}
+	\center Hour Boxplots
 	\includegraphics[width=1.0\textwidth]{plots/bike_sharing/hour_boxplot.png}
 \end{minipage}
 \end{frame}
 
-\begin{frame}
-\frametitle{Ridge Regression}
+\begin{frame}{}
+\frametitle{Bike Sharing Ridge Regression}
+% TODO add list and boxplot for Attributes
+\begin{minipage}{0.3\textwidth}
 \begin{itemize}
-\item 
+\item ridge regression performs poorly
+\item as good as linear regression
 \end{itemize}
+\end{minipage}
+\begin{minipage}{0.69\textwidth}
+    \includegraphics[width=1.0\textwidth]{plots/bike_sharing/ridge_regression.png}
+\end{minipage}
 \end{frame}
 
 \begin{frame}{}
-\frametitle{Bike Sharing Characteristics}
+\frametitle{Bike Sharing Decision Tree}
+\begin{minipage}{0.3\textwidth}
 \begin{itemize}
-\item No missing values
-\item Weather attributes are normalized
-\item 
+\item  Gets worse with increasing depth
 \end{itemize}
+\end{minipage}
+\begin{minipage}{0.69\textwidth}
+    \includegraphics[width=1.0\textwidth]{plots/bike_sharing/tree_regression.png}
+\end{minipage}
 \end{frame}
 
+\begin{frame}{}
+\frametitle{Bike Sharing k Nearest Neighbours}
+\center Correlated attributes perform much worse\\~\\
+\begin{minipage}{0.49\textwidth}
+    \center All Attributes
+    \includegraphics[width=1.0\textwidth]{plots/bike_sharing/knn_all_attributes.png}
+\end{minipage}
+\begin{minipage}{0.49\textwidth}
+    \center Top 5 Correlated
+    \includegraphics[width=1.0\textwidth]{plots/bike_sharing/knn_correlation_regression.png}
+\end{minipage}
+\end{frame}
+
+\begin{frame}{}
+\frametitle{Bike Sharing k Nearest Neighbours Using Encoded Time}
+\begin{minipage}{0.3\textwidth}
+Encoded attribute \textit{hr} into circular variables\
+\begin{itemize}
+\item $sin(2*\pi*x/24)$
+\item $cos(2*\pi*x/24)$
+\end{itemize}
+Sadly there is no improvement
+\end{minipage}
+\begin{minipage}{0.69\textwidth}
+  \includegraphics[width=1.0\textwidth]{plots/bike_sharing/knn_circular_time_regression.png}
+\end{minipage}
+ 
+\end{frame}
+
+
+\begin{frame}{}
+\frametitle{Bike Sharing Decision Trees }
+Comparing minimum samples leaf and minimum samples split\\~\\
+\begin{minipage}{0.49\textwidth}
+	\center before transformation
+    \includegraphics[width=1.0\textwidth]{plots/bike_sharing/tree_regression.png}
+\end{minipage}
+\begin{minipage}{0.49\textwidth}
+	\center after transformation
+    \includegraphics[width=1.0\textwidth]{plots/bike_sharing/tree_regression_transformed.png}
+\end{minipage}
+\end{frame}
+
+\begin{frame}{}
+\frametitle{Bike Sharing MLP Transformed Comparison}
+
+\begin{minipage}{0.49\textwidth}
+    \includegraphics[width=1.0\textwidth]{plots/bike_sharing/mlp_regression.png}
+    \center Original
+\end{minipage}
+\begin{minipage}{0.49\textwidth}
+    \includegraphics[width=1.0\textwidth]{plots/bike_sharing/mlp_regression_transformed.png}
+    \center Transformed
+\end{minipage}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}{}
 \frametitle{Student Performance Characteristics}
@@ -156,7 +222,7 @@
 % TODO Heatmap
 \begin{minipage}{0.3\textwidth}
 \begin{itemize}
-\item Picked 7 highest correlated (> 0.1)
+\item Picked 7 highest correlated ($> 0.1$)
 \end{itemize}
 \end{minipage}
 \begin{minipage}{0.69\textwidth}
