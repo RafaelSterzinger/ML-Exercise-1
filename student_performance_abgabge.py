@@ -13,6 +13,8 @@ from scipy import stats
 #%% init
 path = "plots/student_performance/"
 
+orig_data = pd.read_csv("datasets/student_performance/StudentPerformance.shuf.train.csv")
+
 train_data = pd.read_csv("datasets/student_performance/StudentPerformance.shuf.train.csv")
 test_data = pd.read_csv("datasets/student_performance/StudentPerformance.shuf.test.csv")
 test_label = pd.read_csv("datasets/student_performance/StudentPerformance.shuf.sampleSolution.csv")
@@ -71,37 +73,28 @@ plt.savefig('plots/student_performance/grades_histogram.png')
 plt.show()
 
 
-highest_8_correlated = highest_correlated_data_as_list(train_data, 'Grade', 8)
+highest_7_correlated = highest_correlated_data_as_list(train_data, 'Grade', 8)
 
-correlation_matrix = train_data[highest_8_correlated].corr().abs()
+correlation_matrix = train_data[highest_7_correlated].corr().abs()
 
 sns.heatmap(correlation_matrix, square=True, linewidths=.5).get_figure()
-
 plt.show()
 
-# Heatmap to check correlation
-correlation_matrix = train_data.corr().round(2).abs()
-#plt.savefig(path + "heatmap_numerical.png")
-plot = sns.heatmap(correlation_matrix, ax=ax, linewidths=.5, annot=True).get_figure()
-plot.savefig(path_student + "heatmap.png")
+plt.savefig(path + "heatmap_7_highest_numerical.png")
 
-# mean by school
-print("Mean by school", train_data_student.groupby('school')[target_attribute_student].mean())
-pairplot_student = sns.pairplot(data = train_data_student[numeric_attributes_student])              #todo is missing Grade to see visualisation
-pairplot_student.savefig(path_student + data_initials_student + "pairplot_numeric_values.png")
-
-#plt.figure(figsize=(10,6))
 # positive correlation if parent is teacher, negative if stay at home
-boxplot_student_father = sns.boxplot(x = train_data_student["Fjob"], y=train_data_student[target_attribute_student])
+boxplot_student_father = sns.boxplot(x = train_data["Fjob"], y = train_data['Grade'])
 plt.show()
-boxplot_student_father.figure.savefig(path_student + data_initials_student + "boxplot_father.png")
-boxplot_student_mother = sns.boxplot(x = train_data_student["Mjob"], y=train_data_student[target_attribute_student])
+boxplot_student_father.figure.savefig(path + "boxplot_father.png")
+
+boxplot_student_mother = sns.boxplot(x = train_data["Mjob"], y=train_data['Grade'])
 plt.show()
-boxplot_student_mother.figure.savefig(path_student + data_initials_student + "boxplot_mother.png")
+boxplot_student_mother.figure.savefig(path + "boxplot_mother.png")
 
 # females get better grades
-boxplot_student_gender = sns.boxplot(x = train_data_student["sex"], y = train_data_student[target_attribute_student])
-boxplot_student_gender.figure.savefig(path_student + data_initials_student + "boxplot_gender.png")
+boxplot_student_gender = sns.boxplot(x = train_data["sex"], y = train_data['Grade'])
+plt.show()
+boxplot_student_gender.figure.savefig(path + "boxplot_gender.png")
 
 
 # %% Ridge regression comparison original vs pre processed data
