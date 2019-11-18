@@ -14,11 +14,11 @@ path = "./plots/bike_sharing/"
 plt.rcParams["patch.force_edgecolor"] = True
 
 # %% MSE for testing
-groundTruth = pd.read_csv("datasets/bike_sharing/groundTruth.csv")
+real_solution = pd.read_csv("datasets/bike_sharing/real_solution.csv")
 sampleSolution = pd.read_csv("datasets/bike_sharing/bikeSharing.shuf.sampleSolution.csv")
 index = sampleSolution["id"].to_numpy()
 index = map(lambda x: int(x) - 1, index)
-groundTruth = groundTruth.loc[index][["cnt"]]
+real_solution = real_solution.loc[index][["cnt"]]
 
 # %%
 train = pd.read_csv("datasets/bike_sharing/bikeSharing.shuf.train.csv", skipinitialspace=True)
