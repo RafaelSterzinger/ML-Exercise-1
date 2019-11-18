@@ -98,13 +98,13 @@ rmse, alpha = ridge_regression_alpha_comparison(inlier,
                                                 highest_correlated,
                                                 0, 600, 25,
                                                 "highest correlated attributes")
-
+'''
 rmse, alpha = ridge_regression_alpha_comparison(inlier,
                                                 'shares',
                                                 self_chosen_attributes,
                                                 0, 600, 25,
                                                 "self chosen attributes")
-
+'''
 plt.show()
 plt.savefig(path + 'ridge_regression_alpha_comparison.png')
 print('best rmse: ', rmse, 'best alpha', alpha)
