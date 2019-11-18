@@ -19,6 +19,13 @@
 \usepackage[utf8x]{inputenc}
 \usepackage{graphicx}
 
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+
 %FilePath
 \def \plots {./plots/}
 
@@ -237,6 +244,143 @@
     \center Normalized
 \end{minipage}
 \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{}
+\frametitle{Online News Popularity Characteristics}
+\begin{minipage}{0.3\textwidth}
+\begin{itemize}
+\item No missing values
+\item 39797 instances
+\item 61 attributes
+\item Target value is number of shares in [15,1238]
+\item Only nominal values
+\end{itemize}
+\end{minipage}
+\begin{minipage}{0.69\textwidth}
+    \includegraphics[width=1.0\textwidth]{plots/online_news_popularity/recent_shares_histogram.png}
+\end{minipage}
+\end{frame}
+
+\begin{frame}{}
+\frametitle{Online News Popularity Outlier Removal}
+\begin{minipage}{0.3\textwidth}
+\begin{itemize}
+\item all Instances with $timedelta>30$
+\item all Instances outside Interquartile Range
+\end{itemize}
+\end{minipage}
+\begin{minipage}{0.69\textwidth}
+    \includegraphics[width=1.0\textwidth]{plots/online_news_popularity/outliers_recent_shares_histogram.png}
+\end{minipage}
+\end{frame}
+
+\begin{frame}{}
+\frametitle{CPU Performance Vendors}
+\begin{minipage}{0.3\textwidth}
+\begin{itemize}
+\item Model number no information
+\item Vendors are very unequal
+\begin{itemize}
+	\item Many vendors 1-2 chips
+\end{itemize}
+\end{itemize}
+\end{minipage}
+\begin{minipage}{0.69\textwidth}
+    \includegraphics[width=1.0\textwidth]{plots/cpu_performance/vendor_histogram.png}
+\end{minipage}
+\end{frame}
+
+\begin{frame}{}
+\frametitle{CPU Performance Correlation}
+\begin{itemize}
+	\item All values are correlating with 0.3 or higher
+	\item Selecting min/max main memory and cache
+\end{itemize}
+    \center \includegraphics[width=0.6\textwidth]{plots/cpu_performance/heatmap_numerical.png}
+\end{frame}
+
+\begin{frame}{}
+\frametitle{CPU Performance Preprocessing}
+\begin{itemize}
+\item Skewed data set
+\item Mostly rational values
+\item Preprocessing
+\begin{itemize}
+\item Remove outliers with z-score $>$ 3
+\item Normalization
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{}
+\frametitle{CPU Performance Ridge Regression}
+Comparing all rational types with top three correlating values \\
+Only with high alpha a minimum was reached \\ ~\\
+
+\begin{minipage}{0.49\textwidth}
+\center With outliers
+   \includegraphics[width=1\textwidth]{plots/cpu_performance/ridge_comparision.png}
+\end{minipage}
+ \begin{minipage}{0.49\textwidth}
+ \center Without outliers
+   \includegraphics[width=1\textwidth]{plots/cpu_performance/ridge_comparision_outlier.png}
+\end{minipage}
+\end{frame}
+
+\begin{frame}{}
+\frametitle{CPU Performance Ridge Regression}
+Comparing all rational types with top three correlating values\\Only with high alpha a minimum was reached
+    \center \includegraphics[width=0.6\textwidth]{plots/cpu_performance/tree_comparision.png}
+\end{frame}
+
+\begin{frame}{}
+\frametitle{CPU Performance K-Nearest Neighbors}
+\center Only small K since data set is too small\\ ~\\
+\begin{minipage}{0.49\textwidth}
+\center With outliers
+   \includegraphics[width=1\textwidth]{plots/cpu_performance/knn_comparision.png}
+\end{minipage}
+ \begin{minipage}{0.49\textwidth}
+ \center Without outliers
+   \includegraphics[width=1\textwidth]{plots/cpu_performance/knn_comparision_outlier.png}
+\end{minipage}
+\end{frame}
+
+\begin{frame}{}
+\frametitle{CPU Performance Decision Tree}
+\center Comparing different metrics with all numerical values\\
+\begin{minipage}{0.3\textwidth}
+	\begin{itemize}
+	\item Removing outliers has a big impact
+	\end{itemize}
+\end{minipage}
+\begin{minipage}{0.69\textwidth}
+  \center \includegraphics[width=1\textwidth]{plots/cpu_performance/tree_comparision_outlier.png}
+\end{minipage}
+\end{frame}
+
+\begin{frame}{}
+\frametitle{CPU Performance Multi-Layer Perceptron Outliers}
+\center Trying three different models, with Sigmoid, ReLU and Tangens Hyperbolicus
+    \center \includegraphics[width=0.6\textwidth]{plots/cpu_performance/mlp_regression.png}
+\end{frame}
+
+\begin{frame}{}
+\frametitle{CPU Performance Multi-Layer Perceptron $\neg$ Outliers}
+    \center \includegraphics[width=0.6\textwidth]{plots/cpu_performance/mlp_comparision_outlier.png}
+\end{frame}
+
+\begin{frame}{}
+\frametitle{Summary}
+akjsdhflksajhd
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}{}
 \frametitle{CPU Performance Characteristics}

@@ -249,12 +249,20 @@ highest_correlated.append('shares')
 print(len(highest_correlated))
 
 #%%
-models = [(5, 7, 5)]
+models = [(11,22,11)]
 df = mlp_regression(train_data_recent, highest_correlated, 'shares', models, "logistic")
 df = pd.concat([df, mlp_regression(train_data_recent, highest_correlated, 'shares', models, "relu")])
 df = pd.concat([df, mlp_regression(train_data_recent, highest_correlated, 'shares', models, "tanh")])
 
-df = pd.concat([df, mlp_regression(train_data_outliers, highest_correlated, 'shares', models, "logistic")])
+sns.catplot(x='Layers', y='RMSE', hue='Activation',data = df, kind='bar')
+
+plt.savefig(path + "mlp_comparision_top_correlating_outlier.png")
+plt.show()
+
+#%%
+models = [(11,22,11)]
+
+df = mlp_regression(train_data_outliers, highest_correlated, 'shares', models, "logistic")
 df = pd.concat([df, mlp_regression(train_data_outliers, highest_correlated, 'shares', models, "relu")])
 df = pd.concat([df, mlp_regression(train_data_outliers, highest_correlated, 'shares', models, "tanh")])
 
@@ -262,4 +270,3 @@ sns.catplot(x='Layers', y='RMSE', hue='Activation',data = df, kind='bar')
 
 plt.savefig(path + "mlp_comparision_top_correlating_outlier.png")
 plt.show()
-
