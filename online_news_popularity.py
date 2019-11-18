@@ -10,17 +10,46 @@ from mlp_utils import *
 from scipy import stats
 import numpy as np
 
-# %% set global params for plots and display
+#%%
+self_chosen_attributes = ['kw_avg_avg',
+                          'timedelta',
+                          'data_channel_is_lifestyle',
+                          'data_channel_is_entertainment',
+                          'data_channel_is_bus',
+                          'data_channel_is_socmed',
+                          'data_channel_is_tech',
+                          'data_channel_is_world',
+                          'num_imgs',
+                          'self_reference_avg_sharess',
+                          'num_hrefs',
+                          'global_subjectivity',
+                          'num_videos',
+                          'num_keywords',
+                          'LDA_03']
+
+#%% set global params for plots and display
 plt.rcParams["patch.force_edgecolor"] = True
 pd.set_option('display.expand_frame_repr', False)
 
-# %% read data and remove useless attributes
+#%% read data and remove useless attributes
 train_data = pd.read_csv('datasets/online_news_popularity/OnlineNewsPopularity.csv', skipinitialspace=True)
 train_data = train_data.drop(['url'], axis=1)
 path = 'plots/online_news_popularity/'
-# %% describe data
+#%% describe data
 train_data.describe()
-train_data['shares']
+
+#%% plot highest correlated
+highest_correlated = highest_correlated_data_as_list(train_data, 'shares', 10)
+correlation_matrix = train_data[highest_correlated].corr().abs()
+sns.heatmap(correlation_matrix, square=True, linewidths=.5).get_figure()
+plt.show()
+plt.savefig(path + 'heatmap_highest_correlated.png')
+
+#%% plot own attributes
+correlation_matrix = train_data[highest_correlated].corr().abs()
+sns.heatmap(correlation_matrix, square=True, linewidths=.5).get_figure()
+plt.show()
+plt.savefig(path + 'heatmap_self_chosen.png')
 
 # %% plot all shares
 sns.distplot(train_data["shares"], kde=True)
@@ -49,22 +78,7 @@ print(highest_correlated)
 # %% find attributes with highest correlation
 highest_correlated = highest_correlated_data_as_list(train_data, 'shares', 11)
 highest_correlated.remove('shares')
-# %%
-self_chosen_attributes = ['kw_avg_avg',
-                          'timedelta',
-                          'data_channel_is_lifestyle',
-                          'data_channel_is_entertainment',
-                          'data_channel_is_bus',
-                          'data_channel_is_socmed',
-                          'data_channel_is_tech',
-                          'data_channel_is_world',
-                          'num_imgs',
-                          'self_reference_avg_sharess',
-                          'num_hrefs',
-                          'global_subjectivity',
-                          'num_videos',
-                          'num_keywords',
-                          'LDA_03']
+
 
 # %% compare ridge regression
 rmse, alpha = ridge_regression_alpha_comparison(inlier,
@@ -116,10 +130,10 @@ knn_regression_k_comparison(inlier,
 plt.show()
 plt.savefig(path + 'knn_k_comparison.png')
 
-# %% compare decision trees
+#%% compare decision trees
 
 
-# %% min depth comparison
+#%% min depth comparison
 decision_tree_comparison(inlier,
                          'shares',
                          [[highest_correlated, 'highest correlated without inliers']],
@@ -137,5 +151,5 @@ decision_tree_comparison(inlier,
                          p_step=2)
 plt.show()
 
-# %%
+#%%
 df = mlp_regression(train_data, highest_correlated, 'shares', [(5, 7, 7), (7, 5, 5), (7, 7, 5, 3)], "logistic")

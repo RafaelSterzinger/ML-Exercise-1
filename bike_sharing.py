@@ -12,6 +12,7 @@ from sklearn import linear_model
 
 path = "./plots/bike_sharing/"
 plt.rcParams["patch.force_edgecolor"] = True
+
 # %% MSE for testing
 groundTruth = pd.read_csv("datasets/bike_sharing/groundTruth.csv")
 sampleSolution = pd.read_csv("datasets/bike_sharing/bikeSharing.shuf.sampleSolution.csv")
