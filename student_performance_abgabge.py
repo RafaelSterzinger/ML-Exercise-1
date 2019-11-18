@@ -11,7 +11,7 @@ from scipy import stats
 
 
 #%% init
-path = "./plots/student_performance/"
+path = "plots/student_performance/"
 
 train_data = pd.read_csv("datasets/student_performance/StudentPerformance.shuf.train.csv")
 test_data = pd.read_csv("datasets/student_performance/StudentPerformance.shuf.test.csv")
@@ -30,15 +30,15 @@ attr_own_cat_before_preprocss = ["Mjob", "Fjob"]                           # sin
 attr_own_cat_after_preprocess = ['Mjob_teacher', 'Mjob_health', 'Mjob_services', 'Mjob_at_home', 'Mjob_other'] + ['Fjob_teacher', 'Fjob_health', 'Fjob_services', 'Fjob_at_home', 'Fjob_other']
 attr_own_bin = ["higher", "internet"]
 
-attr_own_all = attr_own + attr_own_cat_after_preprocess + attr_own_bin
+attr_own_all = attr_own + attr_own_cat_after_preprocess + attr_own_bin + ['school', 'sex']
 
 
 attributes_names_tupels = [[numeric_attributes_student, 'All numeric attributes'],
                            [top7_attributes_student, '"Top 7 attributes by correlation"'],
-                           [attr_own + attr_own_cat_after_preprocess + attr_own_bin, 'Attributes found through trial and error (OHE + BE)']]
+                           [attr_own_all, 'Attributes found through trial and error (OHE + BE)']]
 
 
-all_attributes = target + numeric_attributes_student + top7_attributes_student + attr_own + attr_own_cat_before_preprocss + attr_own_bin
+all_attributes = target + numeric_attributes_student + top7_attributes_student + attr_own + attr_own_cat_before_preprocss + attr_own_bin + ['sex', 'school']
 
 train_data = train_data[all_attributes]
 
@@ -46,6 +46,9 @@ train_data = train_data[all_attributes]
 train_data_encoded = pd.get_dummies(train_data, columns=attr_own_cat_before_preprocss)
 for bin_attr in attr_own_bin:
     train_data_encoded[bin_attr] = (train_data_encoded[bin_attr] == 'Yes' ).astype(int)     #replace Yes with other binomical value
+
+train_data_encoded['sex'] = (train_data_encoded['sex'] == 'F' ).astype(int)
+train_data_encoded['school'] = (train_data_encoded['school'] == 'GP' ).astype(int)
 
 # Outlier removal
 # train_data_encoded_out = train_data_encoded[(np.abs(stats.zscore(train_data_encoded)) < 3).all(axis=1)]
@@ -55,6 +58,7 @@ for bin_attr in attr_own_bin:
 # Normalizing
 # train_data_encoded_out_normalized = scale_min_max_without_target(train_data_encoded_out, target)
 train_data_encoded_normalized = scale_min_max_without_target(train_data_encoded, target)
+
 
 # %% Ridge regression comparison original vs pre processed data
 
@@ -69,9 +73,11 @@ ridge_regression_alpha_comparison(train_data_encoded, target,
                                   "Top 7 attributes by correlation")
 
 ridge_regression_alpha_comparison(train_data_encoded, target,
-                                  attr_own + attr_own_cat_after_preprocess + attr_own_bin,
+                                  attr_own_all,
                                   0, 50, 5,
                                   "Attributes found through trial and error (OHE + BE)")
+
+plt.savefig(path + "ridge_alpha_comparison.png")
 plt.show()
 
 ridge_regression_alpha_comparison(train_data_encoded_normalized, target,
@@ -85,18 +91,19 @@ ridge_regression_alpha_comparison(train_data_encoded_normalized, target,
                                   "Min-max: Top 7 attributes by correlation")
 
 ridge_regression_alpha_comparison(train_data_encoded_normalized, target,
-                                  attr_own + attr_own_cat_after_preprocess + attr_own_bin,
+                                  attr_own_all,
                                   0, 50, 5,
                                   "Min-max: Attributes found through trial and error (OHE + BE)")
-
+plt.savefig(path + "ridge_alpha_comparison_normalized.png")
 plt.show()
 
-# %% min depth comparison
+# %% max depth comparison
 decision_tree_comparison(train_data_encoded, target, attributes_names_tupels,
                          comp_type='max_depth',
                          p_from=1,
                          p_to=30,
                          p_step=2)
+plt.savefig(path + "tree_max_depth_comparison.png")
 plt.show()
 
 # %% criterion comparison -> we will keep using mse
@@ -112,10 +119,10 @@ decision_tree_regression_criterion_comparison(train_data_encoded, target,
                                               name = "Top 7 attributes by correlation")
 
 decision_tree_regression_criterion_comparison(train_data_encoded, target,
-                                  attr_own + attr_own_cat_after_preprocess + attr_own_bin,
+                                  attr_own_all,
                                               criterion=['mse', 'friedman_mse'],
                                               name = "Attributes found through trial and error (OHE + BE)")
-
+plt.savefig(path + "tree_criterion_comparison.png")
 plt.show()
 
 # %% min samples leaf comparison normalizing the data makes no difference
@@ -125,9 +132,10 @@ decision_tree_regression_min_samples_leaf_comparison(train_data_encoded, target,
 decision_tree_regression_min_samples_leaf_comparison(train_data_encoded, target, top7_attributes_student, "Top 7 attributes by correlation",
                                   1, 50, 5)
 
-decision_tree_regression_min_samples_leaf_comparison(train_data_encoded, target, attr_own + attr_own_cat_after_preprocess + attr_own_bin,"Attributes found through trial and error (OHE + BE)",
+decision_tree_regression_min_samples_leaf_comparison(train_data_encoded, target, attr_own_all,"Attributes found through trial and error (OHE + BE)",
 
                                   1, 50, 5)
+plt.savefig(path + "tree_min_samples_leaf_comparison.png")
 plt.show()
 
 
@@ -140,9 +148,10 @@ decision_tree_regression_min_samples_leaf_comparison(train_data_encoded_normaliz
                                                      1, 50, 5)
 
 decision_tree_regression_min_samples_leaf_comparison(train_data_encoded_normalized, target,
-                                                     attr_own + attr_own_cat_after_preprocess + attr_own_bin,
+                                                     attr_own_all,
                                                      "Attributes found through trial and error (OHE + BE)",
                                                      1, 50, 5)
+plt.savefig(path + "tree_min_samples_leaf_comparison_normalized.png")
 plt.show()
 
 # %% min samples split comparison
@@ -151,6 +160,7 @@ decision_tree_comparison(train_data_encoded, target, attributes_names_tupels,
                          p_from=2,
                          p_to=30,       #bei 25 konstante Tiefe
                          p_step=1)
+plt.savefig(path + "tree_min_samples_split_comparison.png")
 plt.show()
 # %% k Nearest Neighbour k comparison
 knn_regression_k_comparison(train_data_encoded, target, numeric_attributes_student, "Euclidean: All numerical attributes",
@@ -168,17 +178,18 @@ knn_regression_k_comparison(train_data_encoded, target, top7_attributes_student,
                             metric='manhattan')
 
 knn_regression_k_comparison(train_data_encoded, target,
-                            attr_own + attr_own_cat_after_preprocess + attr_own_bin,
+                            attr_own_all,
                             "Attributes found through trial and error (OHE + BE)",
                             metric='euclidean')
 knn_regression_k_comparison(train_data_encoded, target,
-                            attr_own + attr_own_cat_after_preprocess + attr_own_bin,
+                            attr_own_all,
                             "Attributes found through trial and error (OHE + BE)",
                             metric='minkowski')
 knn_regression_k_comparison(train_data_encoded, target,
-                            attr_own + attr_own_cat_after_preprocess + attr_own_bin,
+                            attr_own_all,
                             "Attributes found through trial and error (OHE + BE)",
                             metric='manhattan')
+plt.savefig(path + "knn_metric_comparison.png")
 plt.show()
 
 knn_regression_k_comparison(train_data_encoded_normalized, target, numeric_attributes_student, "Min-max|Euclidean: All numerical attributes",
@@ -196,18 +207,18 @@ knn_regression_k_comparison(train_data_encoded_normalized, target, top7_attribut
                             metric='manhattan')
 
 knn_regression_k_comparison(train_data_encoded_normalized, target,
-                            attr_own + attr_own_cat_after_preprocess + attr_own_bin,
+                            attr_own_all,
                             "Min-max|Euclidean: Attributes found through trial and error (OHE + BE)",
                             metric='euclidean')
 knn_regression_k_comparison(train_data_encoded_normalized, target,
-                            attr_own + attr_own_cat_after_preprocess + attr_own_bin,
+                            attr_own_all,
                             "Min-max|Minkowski: Attributes found through trial and error (OHE + BE)",
                             metric='minkowski')
 knn_regression_k_comparison(train_data_encoded_normalized, target,
-                            attr_own + attr_own_cat_after_preprocess + attr_own_bin,
+                            attr_own_all,
                             "Min-max|Manhattan: Attributes found through trial and error (OHE + BE)",
                             metric='manhattan')
-
+plt.savefig(path + "tree_min_samples_leaf_comparison_normalized.png")
 plt.show()
 
 # %% k Nearest Neighbour k comparison
@@ -217,7 +228,7 @@ knn_regression_k_comparison(train_data_encoded, target, numeric_attributes_stude
 knn_regression_k_comparison(train_data_encoded, target, top7_attributes_student, "Top 7 attributes by correlation",
                             metric='euclidean')
 knn_regression_k_comparison(train_data_encoded, target,
-                            attr_own + attr_own_cat_after_preprocess + attr_own_bin,
+                            attr_own_all,
                             "Attributes found through trial and error (OHE + BE)",
                             metric='euclidean')
 #plt.show()
@@ -227,16 +238,16 @@ knn_regression_k_comparison(train_data_encoded_normalized, target, numeric_attri
 knn_regression_k_comparison(train_data_encoded_normalized, target, top7_attributes_student, "Min-max: Top 7 attributes by correlation",
                             metric='euclidean')
 knn_regression_k_comparison(train_data_encoded_normalized, target,
-                            attr_own + attr_own_cat_after_preprocess + attr_own_bin,
+                            attr_own_all,
                             "Min-max: Attributes found through trial and error (OHE + BE)",
                             metric='euclidean')
-
+plt.savefig(path + "knn_k_normalized_comparison.png")
 plt.show()
 
 
 #%% knn with different distances
-workaroudn = attr_own + attr_own_cat_after_preprocess + attr_own_bin + target
-trimmed_data = train_data_encoded[workaroudn]
+workaround = attr_own_all + target
+trimmed_data = train_data_encoded[workaround]
 x_train, y_train, x_test, y_test = make_split(trimmed_data,'Grade')
 find_best_rmse('with all numeric and euclidean',
                x_train, y_train, x_test, y_test)
@@ -251,7 +262,7 @@ find_best_rmse('with all attributes and minkowski',x_train, y_train, x_test, y_t
 #plt.ylabel("Root Mean Squared Error")
 #plt.show()
 
-trimmed_data = train_data_encoded_normalized[workaroudn]
+trimmed_data = train_data_encoded_normalized[workaround]
 x_train, y_train, x_test, y_test = make_split(trimmed_data,'Grade')
 find_best_rmse('Min:max with all numeric and euclidean',
                x_train, y_train, x_test, y_test)
@@ -263,6 +274,7 @@ find_best_rmse('Min:max with all numeric manhatten',
 x_train, y_train, x_test, y_test = make_split(trimmed_data,'Grade')
 find_best_rmse('Min:max with all attributes and minkowski',x_train, y_train, x_test, y_test,metric="minkowski")
 
+plt.savefig(path + "knn_wo_crossvalidation_normalized_comparison.png")
 #plt.savefig(path_student + "knn_all_attributes.png")
 #plt.ylabel("Root Mean Squared Error")
 plt.show()
@@ -282,6 +294,7 @@ df = pd.concat([df, mlp_regression(train_data_encoded, attr_own_all, 'Grade', [(
 sns.catplot(x='Layers', y='RSME', hue='Activation',data = df, kind='bar')
 #df = pd.melt(df, id_vars="Layers", var_name="Activation", value_name="RSME")
 plt.ylim(2.5,5.5)
+plt.savefig(path + "mlp_wo_crossvalidation_layer_activation_function_comparison.png")
 plt.show()
 
 # %% MLP Encoded data
@@ -294,6 +307,7 @@ df = pd.concat([df, mlp_regression_layer_comparison(train_data_encoded, attr_own
 sns.catplot(x='Layers', y='RSME', hue='Activation',data = df, kind='bar')
 #df = pd.melt(df, id_vars="Layers", var_name="Activation", value_name="RSME")
 plt.ylim(2.5,5.5)
+plt.savefig(path + "mlp_crossvalidation_layer_activation_function_comparison.png")
 plt.show()
 
 # %% MLP Encoded data Normalized -> Logistik unbeeinflusst -> andere schlechter!
@@ -307,3 +321,4 @@ sns.catplot(x='Layers', y='RSME', hue='Activation',data = df, kind='bar')
 #df = pd.melt(df, id_vars="Layers", var_name="Activation", value_name="RSME")
 plt.ylim(2.5,5.5)
 plt.show()
+plt.savefig(path + "mlp_layer_activation_function_comparison_normalized.png")
