@@ -95,14 +95,8 @@ g.map_diag(sns.distplot, kde=False, color='red')
 g.map_lower(sns.kdeplot, cmap=cmap)
 g.map_lower(corrfunc)
 
+plt.savefig('plots/student_performance/correlation_coefficient.png')
 plt.show()
-
-#%%
-x_train.append(y_train)
-y_train
-
-#%%
-data.head()
 
 #%%
 # X_train is our training data, we will make a copy for plotting
@@ -123,19 +117,3 @@ for i, col in enumerate(X_plot.columns[:-1]):
     plt.title('Distribution of %s' % col)
 
 plt.tight_layout()
-
-#%%
-from sklearn.linear_model import BayesianRidge
-from sklearn.naive_bayes import GaussianNB
-
-# clf = BayesianRidge(compute_score=True)
-# clf.fit(x_train, y_train)
-# pred=clf.predict(x_test)
-#
-# rsme = sqrt(mean_squared_error(y_test, pred))  # calculate rmse
-# rsme
-from sklearn.naive_bayes import GaussianNB
-gnb = GaussianNB()
-y_pred = gnb.fit(x_train, y_train).predict(x_test)
-rsme = sqrt(mean_squared_error(y_test, y_pred))  # calculate rmse
-rsme
