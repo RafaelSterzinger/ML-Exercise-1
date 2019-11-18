@@ -161,7 +161,7 @@ find_best_rmse('with top 3 attributes and manhatten',
 x_train, y_train, x_test, y_test = make_split(train_data_out[selection], 'EPR')
 find_best_rmse('with top 3 attributes and minkowski', x_train, y_train, x_test, y_test, metric="minkowski")
 
-plt.savefig(path + "tree_comparision_outlier.png")
+plt.savefig(path + "knn_comparision_outlier.png")
 plt.show()
 
 # %% mlp comparision, with outlier cleansing
