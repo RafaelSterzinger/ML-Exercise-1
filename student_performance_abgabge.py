@@ -279,8 +279,8 @@ df = pd.concat([df, mlp_regression(train_data_encoded, attr_own_all, 'Grade', [(
 
 df = pd.concat([df, mlp_regression(train_data_encoded, attr_own_all, 'Grade', [(5, 7, 7), (7, 5, 5), (7, 7, 5, 3)], "tanh")])
 
-sns.catplot(x='Layers', y='RSME', hue='Activation',data = df, kind='bar')
-#df = pd.melt(df, id_vars="Layers", var_name="Activation", value_name="RSME")
+sns.catplot(x='Layers', y='RMSE', hue='Activation',data = df, kind='bar')
+#df = pd.melt(df, id_vars="Layers", var_name="Activation", value_name="RMSE")
 plt.ylim(2.5,5.5)
 plt.show()
 
@@ -291,8 +291,8 @@ df = pd.concat([df, mlp_regression_layer_comparison(train_data_encoded, attr_own
 
 df = pd.concat([df, mlp_regression_layer_comparison(train_data_encoded, attr_own_all, 'Grade', [(5, 7, 7), (7, 5, 5), (7, 7, 5, 3)], "tanh")])
 
-sns.catplot(x='Layers', y='RSME', hue='Activation',data = df, kind='bar')
-#df = pd.melt(df, id_vars="Layers", var_name="Activation", value_name="RSME")
+sns.catplot(x='Layers', y='RMSE', hue='Activation',data = df, kind='bar')
+#df = pd.melt(df, id_vars="Layers", var_name="Activation", value_name="RMSE")
 plt.ylim(2.5,5.5)
 plt.show()
 
@@ -303,7 +303,7 @@ df = pd.concat([df, mlp_regression_layer_comparison(train_data_encoded_normalize
 
 df = pd.concat([df, mlp_regression_layer_comparison(train_data_encoded_normalized, attr_own_all, 'Grade', [(5, 7, 7), (7, 5, 5), (7, 7, 5, 3)], "tanh")])
 
-sns.catplot(x='Layers', y='RSME', hue='Activation',data = df, kind='bar')
-#df = pd.melt(df, id_vars="Layers", var_name="Activation", value_name="RSME")
+sns.catplot(x='Layers', y='RMSE', hue='Activation',data = df, kind='bar')
+#df = pd.melt(df, id_vars="Layers", var_name="Activation", value_name="RMSE")
 plt.ylim(2.5,5.5)
 plt.show()

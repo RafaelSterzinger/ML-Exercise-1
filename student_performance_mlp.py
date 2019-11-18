@@ -24,7 +24,7 @@ df = pd.concat([df, mlp_regression(data, numeric_attributes_student, 'Grade', [(
 
 df = pd.concat([df, mlp_regression(data, numeric_attributes_student, 'Grade', [(5, 7, 7), (7, 5, 5), (7, 7, 5, 3)], "tanh")])
 
-sns.catplot(x='Layers', y='RSME', hue='Activation',data = df, kind='bar')
-#df = pd.melt(df, id_vars="Layers", var_name="Activation", value_name="RSME")
+sns.catplot(x='Layers', y='RMSE', hue='Activation',data = df, kind='bar')
+#df = pd.melt(df, id_vars="Layers", var_name="Activation", value_name="RMSE")
 plt.ylim(3.5,5.5)
 plt.show()
