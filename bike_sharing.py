@@ -174,6 +174,8 @@ plt.savefig(path + "knn_circular_time_regression.png")
 plt.show()
 
 hour.plot.scatter('hr_sin','hr_cos').set_aspect('equal')
+plt.xlabel("Hours encoded with Sinus")
+plt.ylabel("Hours encoded with Cosinus")
 plt.savefig(path + "sin_cos_visualization")
 plt.show()
 
