@@ -55,6 +55,7 @@ plt.savefig(path + 'heatmap_highest_correlated.png')
 #%%
 train_data_recent = train_data[train_data['timedelta'] < 30]
 train_data_recent.describe()
+train_data_recent.index = np.arange(0, len(train_data_recent), 1)
 print(train_data)
 
 #%% plot own attributes
@@ -98,6 +99,12 @@ rmse, alpha = ridge_regression_alpha_comparison(inlier,
                                                 highest_correlated,
                                                 0, 600, 25,
                                                 "highest correlated attributes")
+
+rmse, alpha = ridge_regression_alpha_comparison(train_data_recent,
+                                                'shares',
+                                                highest_correlated,
+                                                0, 600, 25,
+                                                "train data recent highest correlated")
 '''
 rmse, alpha = ridge_regression_alpha_comparison(inlier,
                                                 'shares',
@@ -157,6 +164,23 @@ decision_tree_comparison(inlier,
 decision_tree_comparison(inlier,
                          'shares',
                          [[highest_correlated, 'highest correlated with inliers']],
+                         comp_type='max_depth',
+                         p_from=1,
+                         p_to=30,
+                         p_step=2)
+
+
+decision_tree_comparison(train_data_recent,
+                         'shares',
+                         [[highest_correlated, 'REC highest correlated without inliers']],
+                         comp_type='max_depth',
+                         p_from=1,
+                         p_to=30,
+                         p_step=2)
+
+decision_tree_comparison(train_data_recent,
+                         'shares',
+                         [[highest_correlated, 'REC highest correlated with inliers']],
                          comp_type='max_depth',
                          p_from=1,
                          p_to=30,
