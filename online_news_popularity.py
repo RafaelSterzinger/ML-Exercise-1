@@ -52,16 +52,51 @@ plt.savefig(path+'shares_histogram.png')
 plt.show()
 
 #%% find attributes with highest correlation
-highest_correlated=highest_correlated_data_as_list(train_data,'shares',30)
-highest_correlated
+highest_correlated=highest_correlated_data_as_list(train_data,'shares',10)
+highest_correlated.remove('shares')
 
 #%%
 
 
-#%%
-ridge_regression_alpha_comparison(train_data,
+#%% compare ridge regression
+rmse,alpha = ridge_regression_alpha_comparison(train_data,
                                   'shares',
                                   highest_correlated,
-                                  0, 50, 5,
+                                  0, 600, 50,
                                   "highest correlated attributes")
 plt.show()
+plt.savefig(path+'ridge_regression_alpha_comparison.png')
+print('best rmse: ',rmse, 'best alpha', alpha)
+
+#%% compare knn
+knn_regression_k_comparison(train_data,
+                            'shares',
+                            highest_correlated,
+                            'highest 30 correlated attributes with euclidean',
+                            k_to=25)
+plt.show()
+
+#%%
+knn_regression_k_comparison(inlier,
+                            'shares',
+                            highest_correlated,
+                            'highest 30 correlated attributes with euclidean',
+                            k_to=25)
+
+plt.show()
+plt.savefig(path+'knn_k_comparison.png')
+
+#%% compare decision trees
+# %% min depth comparison
+decision_tree_comparison(train_data,
+                         'shares',
+                         [[highest_correlated,'highest correlated']],
+                         comp_type='max_depth',
+                         p_from=1,
+                         p_to=30,
+                         p_step=2)
+plt.show()
+
+#%%
+#%%
+df = mlp_regression(train_data, highest_correlated, 'shares', [(5, 7, 7), (7, 5, 5), (7, 7, 5, 3)], "logistic")

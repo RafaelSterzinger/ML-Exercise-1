@@ -135,7 +135,11 @@ def knn_regression_k_comparison(train_data, ytarget, x_attributes, name,
     best_mrmse = np.infty
     x_steps = np.arange(k_from, k_to, step)
     for x in x_steps:
-        mrmse = knn_cross_validation(train_data=train_data, ytarget=ytarget, x_attributes=x_attributes, metric=metric, splits=splits,
+        mrmse = knn_cross_validation(train_data=train_data,
+                                     ytarget=ytarget,
+                                     x_attributes=x_attributes,
+                                     metric=metric,
+                                     splits=splits,
                                      k=x)
         if x == k_from:
             best_mrmse = mrmse
