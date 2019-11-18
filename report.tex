@@ -24,7 +24,7 @@
 
 
 \title[Your Short Title]{Exercise 1 - Regression}
-\author{Christian Stippel, Rafael Sterzinger, Fatjon Zogaj}
+\author{Rafael Sterzinger, Christian Stippel, Fatjon Zogaj}
 \institute{Machine Learning}
 \date{18.11.2019}
 
@@ -46,38 +46,14 @@
 \end{frame}
 
 \begin{frame}
-\frametitle{Outline}
-\tableofcontents
-\end{frame}
-
-\section{Regression Techniques}
-\subsection{Ridge Regression}
-
-\begin{frame}
 \frametitle{Ridge Regression}
 \begin{itemize}
 \item 
 \end{itemize}
 \end{frame}
 
-\subsection{K-Nearest Neighbors Regression}
-\subsection{Decision Tree Regression}
-\subsection{Bayesian Linear Regression}
-
-\section{Performance Metrics}
-
-\begin{frame}
-\frametitle{Metrics}
-\begin{itemize}
-\item Root Mean Squared Error
-\item 
-\end{itemize}
-\end{frame}
-
-\section{Bike Sharing}
-
 \begin{frame}{}
-\frametitle{Characteristics}
+\frametitle{Bike Sharing Characteristics}
 \begin{itemize}
 \item No missing values
 \item Weather attributes are normalized
@@ -88,15 +64,76 @@
 \begin{frame}
     \begin{figure}
         \centering
-        \includegraphics[width=0.27\textwidth]{\plots bike_sharing/hist1.png}
+        %\includegraphics[width=0.27\textwidth]{\plots bike_sharing/hist1.png}
     \end{figure}
 \end{frame}
 
-\section{Student Performance}
+\begin{frame}{}
+\frametitle{Student Performance Characteristics}
+\begin{minipage}{0.45\textwidth}
+\begin{itemize}
+\item No missing values
+\item Categorical attributes
+\item Lots of binary attributes
+\item Target is in [0,20]
+\end{itemize}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+    \includegraphics[width=1.0\textwidth]{\plots student_performance/grades_histogram.png}
+\end{minipage}
+\end{frame}
 
-\section{Online News Popularity}
+\begin{frame}{}
+\frametitle{Student Performance important Attributes}
+% TODO add list and boxplot for Attributes
+\end{frame}
 
-\section{CPU Performance}
+\begin{frame}{}
+\frametitle{Student Performance Correlation}
+% TODO Heatmap
+\end{frame}
+
+\begin{frame}{}
+\frametitle{Student Performance Preprocessing}
+% TODO
+\end{frame}
+
+\begin{frame}{}
+\frametitle{Student Performance k nearest neighbour}
+\begin{minipage}{0.30\textwidth}
+\begin{itemize}
+\item  % TODO
+\end{itemize}
+\end{minipage}
+\begin{minipage}{0.69\textwidth}
+    \includegraphics[width=1.0\textwidth]{\plots student_performance/knn_k_normalized_comparison.png}
+\end{minipage}
+\end{frame}
+
+\begin{frame}{}
+\frametitle{Student Performance decision trees sample leaf comparison}
+\begin{minipage}{0.30\textwidth}
+\begin{itemize}
+\item  % TODO
+\end{itemize}
+\end{minipage}
+\begin{minipage}{0.69\textwidth}
+    \includegraphics[width=1.0\textwidth]{plots/student_performance/tree_min_samples_leaf_comparison.png}
+\end{minipage}
+\end{frame}
+
+
+\begin{frame}{}
+\frametitle{Student Performance normalized decision tree comparison}
+\begin{minipage}{0.30\textwidth}
+\begin{itemize}
+\item  % TODO
+\end{itemize}
+\end{minipage}
+\begin{minipage}{0.69\textwidth}
+    \includegraphics[width=1.0\textwidth]{plots/student_performance/tree_min_samples_leaf_comparison_normalized.png}
+\end{minipage}
+\end{frame}
 
 \begin{frame}{}
 \frametitle{Characteristics}

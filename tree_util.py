@@ -144,7 +144,6 @@ def decision_tree_comparison(train_data, ytarget, x_attributes_tupels_list,
                                                                   x_attributes[1],
                                                                   p_from, p_to, p_step)
                 #min_samples_leaf_step)
-    plt.show        #todo funkt nicht
 
 
 #todo verschieden Hyperparameter ineinander verschachteln und das beste zurück geben
