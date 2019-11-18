@@ -24,7 +24,7 @@ plt.xlabel('Vendors')
 plt.xticks(rotation=90)
 plt.ylabel('Count')
 plt.title('Chips per Vendor')
-plt.savefig('plots/cpu_performance/vendor_histogram.png')
+plt.savefig(path + 'vendor_histogram.png')
 plt.show()
 
 # %% Describtion Check for missing values
@@ -38,14 +38,14 @@ sns.distplot(train_data["EPR"], kde=True)
 plt.xlabel('Estimated Performance')
 plt.ylabel('Count')
 plt.title('Distribution of Performance')
-plt.savefig('plots/cpu_performance/performance_histogram.png')
+plt.savefig(path + 'performance_histogram.png')
 plt.show()
 
 # %% Heatplot
 correlation_matrix = train_data.corr().round(2).abs()
 sns.heatmap(correlation_matrix, square=True, linewidths=.5).get_figure()
-plt.show()
 plt.savefig(path + "heatmap_numerical.png")
+plt.show()
 
 train_data.corr()['EPR'].abs().sort_values()
 number_features.remove("PRP")
@@ -62,8 +62,8 @@ ridge_regression_alpha_comparison(train_data, target, ["MMAX", "MMIN", "CACH"],
                                   100000,
                                   10000,
                                   "Top three correlating values")
-plt.show()
 plt.savefig(path + "ridge_comparision.png")
+plt.show()
 
 # %% decision tree max_depth comparison
 
@@ -74,8 +74,8 @@ decision_tree_comparison(train_data, target, options,
                          p_from=1,
                          p_to=25,
                          p_step=1)
-plt.show()
 plt.savefig(path + "tree_comparision.png")
+plt.show()
 
 # %% knn comparision
 
@@ -88,7 +88,7 @@ find_best_rmse('with all attributes and euclidean', x_train, y_train, x_test, y_
 
 x_train, y_train, x_test, y_test = make_split(train_data, 'EPR')
 find_best_rmse('with all attributes and minkowski', x_train, y_train, x_test, y_test, metric="minkowski")
-
+plt.savefig(path + "knn_comparision.png")
 plt.show()
 
 # %% mlp comparision
@@ -99,8 +99,9 @@ df = pd.concat([df, mlp_regression(train_data, number_features, 'EPR', models, "
 
 df = pd.concat([df, mlp_regression(train_data, number_features, 'EPR', models, "tanh")])
 
-sns.catplot(x='Layers', y='RSME', hue='Activation',data = df, kind='bar')
+sns.catplot(x='Layers', y='RMSE', hue='Activation',data = df, kind='bar')
 
+plt.savefig(path + "mlp_regression.png")
 plt.show()
 
 # %% Outlier removal
@@ -110,17 +111,17 @@ train_data_out.index = np.arange(0, len(train_data_out), 1)
 # %%  Ridge regression
 ridge_regression_alpha_comparison(train_data_out, target, number_features,
                                   0,
-                                  100000,
-                                  10000,
+                                  1000,
+                                  100,
                                   "Only Numerical values")
 
 ridge_regression_alpha_comparison(train_data_out, target, ["MMAX", "MMIN", "CACH"],
                                   0,
-                                  100000,
-                                  10000,
+                                  1000,
+                                  100,
                                   "Top three correlating values")
-plt.show()
 plt.savefig(path + "ridge_comparision_outlier.png")
+plt.show()
 
 # %% decision tree max_depth comparison
 
@@ -141,8 +142,8 @@ decision_tree_comparison(train_data_out, target, options,
                          p_to=30,
                          p_step=2)
 
-plt.show()
 plt.savefig(path + "tree_comparision_outlier.png")
+plt.show()
 # %% knn comparision
 x_train, y_train, x_test, y_test = make_split(train_data_out, 'EPR')
 find_best_rmse('with all attributes and manhatten',
@@ -160,6 +161,7 @@ find_best_rmse('with top 3 attributes and manhatten',
 x_train, y_train, x_test, y_test = make_split(train_data_out[selection], 'EPR')
 find_best_rmse('with top 3 attributes and minkowski', x_train, y_train, x_test, y_test, metric="minkowski")
 
+plt.savefig(path + "tree_comparision_outlier.png")
 plt.show()
 
 # %% mlp comparision, with outlier cleansing
@@ -170,9 +172,11 @@ df = pd.concat([df, mlp_regression(train_data_out, number_features, 'EPR', model
 
 df = pd.concat([df, mlp_regression(train_data_out, number_features, 'EPR', models, "tanh")])
 
-sns.catplot(x='Layers', y='RSME', hue='Activation',data = df, kind='bar')
+sns.catplot(x='Layers', y='RMSE', hue='Activation',data = df, kind='bar')
 
+plt.savefig(path + "mlp_comparision_outlier.png")
 plt.show()
+
 # %% mlp comparision outlier cleansing, with top correlating
 models = [(5, 7, 7), (7, 5, 5), (7, 7, 5, 3)]
 df = mlp_regression(train_data_out, ["MMIN", "MMAX", "CACH", "EPR"], 'EPR', models, "logistic")
@@ -181,10 +185,10 @@ df = pd.concat([df, mlp_regression(train_data_out, ["MMIN", "MMAX", "CACH", "EPR
 
 df = pd.concat([df, mlp_regression(train_data_out, ["MMIN", "MMAX", "CACH", "EPR"], 'EPR', models, "tanh")])
 
-sns.catplot(x='Layers', y='RSME', hue='Activation',data = df, kind='bar')
+sns.catplot(x='Layers', y='RMSE', hue='Activation',data = df, kind='bar')
 
+plt.savefig(path + "mlp_comparision_top_correlating_outlier.png")
 plt.show()
-# TODO: mit minmax skalierung
 
 # %% mlp comparision outlier cleansing, with top correlating
 models = [(5, 7, 7), (7, 5, 5), (7, 7, 5, 3)]
@@ -194,7 +198,8 @@ df = pd.concat([df, mlp_regression_layer_comparison(train_data_out, ["MMIN", "MM
 
 df = pd.concat([df, mlp_regression_layer_comparison(train_data_out, ["MMIN", "MMAX", "CACH", "EPR"], 'EPR', models, "tanh")])
 
-sns.catplot(x='Layers', y='RSME', hue='Activation',data = df, kind='bar')
+sns.catplot(x='Layers', y='RMSE', hue='Activation',data = df, kind='bar')
 
+plt.savefig(path + "mlp_comparision_top_correlating_outlier.png")
 plt.show()
 # TODO: mit minmax skalierung

@@ -81,7 +81,7 @@ def find_best_rmse(name, x_train, y_train, x_test, y_test, k_max=23, metric='euc
         plt.plot(t, rmse_val[0:k_max - 1], '--', label=name)
         plt.xticks(t)
         plt.xlabel('# neighbours (k)')
-        plt.ylabel('rsme')
+        plt.ylabel('Root Mean Squared Error')
         plt.scatter(best_k, best_rmse)
         plt.legend()
     return best_rmse, best_k

@@ -44,7 +44,7 @@ def mlp_regression(train_data, x_attributes, y_target, layers, activation='relu'
 
     layers = map(convertTuple, layers)
     activation = [activation]
-    return pd.DataFrame(list(zip(activation*len(rsme_layers),layers,rsme_layers)),columns=['Activation','Layers','RSME'])
+    return pd.DataFrame(list(zip(activation*len(rsme_layers),layers,rsme_layers)),columns=['Activation','Layers','RMSE'])
 
 def plot_loss(model):
     # Plot the 'loss_curve_' protery on model to see how well we are learning over the iterations
@@ -102,6 +102,6 @@ def mlp_regression_layer_comparison(train_data, x_attributes, y_target, layers, 
 
     layers = map(convertTuple, layers)
     activation = [activation]
-    return pd.DataFrame(list(zip(activation*len(rsme_layers),layers,rsme_layers)),columns=['Activation','Layers','RSME'])
+    return pd.DataFrame(list(zip(activation*len(rsme_layers),layers,rsme_layers)),columns=['Activation','Layers','RMSE'])
 
 
