@@ -35,8 +35,15 @@ pd.set_option('display.expand_frame_repr', False)
 train_data = pd.read_csv('datasets/online_news_popularity/OnlineNewsPopularity.csv', skipinitialspace=True)
 train_data = train_data.drop(['url'], axis=1)
 path = 'plots/online_news_popularity/'
+
 #%% describe data
-train_data.describe()
+sns.distplot(train_data["timedelta"], kde=True)
+plt.xlabel('timedelta')
+plt.ylabel('count')
+plt.title('Distribution of timedelta')
+plt.savefig(path + 'timedelta.png')
+plt.show()
+
 
 #%% plot highest correlated
 highest_correlated = highest_correlated_data_as_list(train_data, 'shares', 10)
@@ -44,6 +51,11 @@ correlation_matrix = train_data[highest_correlated].corr().abs()
 sns.heatmap(correlation_matrix, square=True, linewidths=.5).get_figure()
 plt.show()
 plt.savefig(path + 'heatmap_highest_correlated.png')
+
+#%%
+train_data_recent = train_data[train_data['timedelta'] < 30]
+train_data_recent.describe()
+print(train_data)
 
 #%% plot own attributes
 correlation_matrix = train_data[highest_correlated].corr().abs()
