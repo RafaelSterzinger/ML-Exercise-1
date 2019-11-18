@@ -1,5 +1,4 @@
 from pdflatex import PDFLaTeX
-import bike_sharing
 import cpu_performance
 import student_performance
 

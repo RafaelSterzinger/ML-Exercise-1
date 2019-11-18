@@ -171,7 +171,7 @@ def decision_tree_regression_min_samples_leaf_comparison(train_data, ytarget, x_
     if plot:
         plt.plot(x_steps, mrmse_val[0:len(mrmse_val)] , '--', label=name)
         plt.xticks(x_steps)
-        plt.xlabel('min_samples_leaf')
+        plt.xlabel('Minimum samples split')
         plt.ylabel('rmse')
         plt.scatter(best_min_samples_leaf, best_mrmse)
         plt.legend()
@@ -202,7 +202,7 @@ def decision_tree_regression_min_samples_split_comparison(train_data, ytarget, x
     if plot:
         plt.plot(x_steps, mrmse_val[0:len(mrmse_val)] , '--', label=name)
         plt.xticks(x_steps)
-        plt.xlabel('min_samples_split')
+        plt.xlabel('Minimum samples split')
         plt.ylabel('rmse')
         plt.scatter(best_min_samples_split, best_mrmse)
         plt.legend()
