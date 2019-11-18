@@ -36,6 +36,7 @@ train_data = pd.read_csv('datasets/online_news_popularity/OnlineNewsPopularity.c
 train_data = train_data.drop(['url'], axis=1)
 path = 'plots/online_news_popularity/'
 
+'''
 # %% plot all shares
 sns.distplot(train_data["shares"], kde=True)
 plt.xlabel('shares')
@@ -46,13 +47,18 @@ plt.show()
 
 #%%
 train_data.describe()
-
+'''
 #%% recent train data without outliers
 train_data_recent = train_data[train_data['timedelta'] < 30]
 train_data_recent.describe()
 train_data_recent.index = np.arange(0, len(train_data_recent), 1)
 
-#%% plot recent
+y = train_data_recent["shares"]
+outliers = y.between(y.quantile(0.1),y.quantile(0.90))
+train_data_outliers = train_data_recent[outliers]
+train_data_outliers.index = range(0,len(train_data_outliers))
+
+#%% plot recent and remove outliers
 sns.distplot(train_data_recent["shares"], kde=True)
 plt.xlabel('shares')
 plt.ylabel('count')
@@ -60,28 +66,26 @@ plt.title('Distribution of Shares')
 plt.savefig(path + 'recent_shares_histogram.png')
 plt.show()
 
-#%% remove outliers
-train_data_recent = train_data_recent[(np.abs(stats.zscore(train_data_recent)) < 3).all(axis=1)]
-train_data_recent.index = np.arange(0, len(train_data_recent), 1)
+
 
 #%%
-sns.distplot(train_data_recent["shares"], kde=True)
+sns.distplot(train_data_outliers["shares"], kde=True)
 plt.xlabel('shares')
 plt.ylabel('count')
 plt.title('Distribution of Shares')
-plt.savefig(path + 'normalized_recent_shares_histogram.png')
+plt.savefig(path + 'outliers_recent_shares_histogram.png')
 plt.show()
 
 
 #%% describe data
-
+'''
 sns.distplot(train_data["timedelta"], kde=True)
 plt.xlabel('timedelta')
 plt.ylabel('count')
 plt.title('Distribution of timedelta')
 plt.savefig(path + 'timedelta.png')
 plt.show()
-
+'''
 #%% plot highest correlated
 highest_correlated = highest_correlated_data_as_list(train_data_recent, 'shares', 10)
 correlation_matrix = train_data_recent[highest_correlated].corr().abs()
@@ -89,6 +93,7 @@ sns.heatmap(correlation_matrix, square=True, linewidths=.5).get_figure()
 plt.show()
 plt.savefig(path + 'heatmap_highest_correlated.png')
 
+'''
 #%%
 sns.distplot(train_data_recent["shares"], kde=True)
 plt.xlabel('shares')
@@ -96,7 +101,7 @@ plt.ylabel('count')
 plt.title('Distribution of Shares')
 plt.savefig(path + 'shares_histogram.png')
 plt.show()
-
+'''
 #%%
 print(len(train_data_recent))
 
@@ -106,7 +111,7 @@ sns.heatmap(correlation_matrix, square=True, linewidths=.5).get_figure()
 plt.show()
 plt.savefig(path + 'heatmap_self_chosen.png')
 
-
+'''
 # %% plot shares with threshold <= threshold
 sns.distplot(train_data_recent["shares"], kde=True, bins=20)
 plt.xlabel('shares')
@@ -114,7 +119,7 @@ plt.ylabel('count')
 plt.title('Distribution of Shares where zscore < 2.1')
 plt.savefig('plots/online_news_popularity/shares_histogram.png')
 plt.show()
-
+'''
 # %% print highest correlated attributes
 highest_correlated = highest_correlated_data(train_data, 'shares', 60)
 print(highest_correlated)
@@ -128,18 +133,15 @@ highest_correlated.remove('shares')
 rmse, alpha = ridge_regression_alpha_comparison(train_data_recent,
                                                 'shares',
                                                 highest_correlated,
-                                                0, 600, 25,
+                                                0, 600, 40,
                                                 "highest correlated attributes")
-
-
-rmse, alpha = ridge_regression_alpha_comparison(train_data_recent,
+'''
+rmse, alpha = ridge_regression_alpha_comparison(train_data_outliers,
                                                 'shares',
                                                 highest_correlated,
-                                                0, 600, 25,
-                                                "train data recent highest correlated")
+                                                0, 3000, 100,
+                                                "highest correlated attributes")
 
-
-'''
 rmse, alpha = ridge_regression_alpha_comparison(inlier,
                                                 'shares',
                                                 self_chosen_attributes,
@@ -150,18 +152,29 @@ plt.show()
 plt.savefig(path + 'ridge_regression_alpha_comparison.png')
 print('best rmse: ', rmse, 'best alpha', alpha)
 
+# %% compare ridge regression
+rmse, alpha = ridge_regression_alpha_comparison(train_data_outliers,
+                                                'shares',
+                                                highest_correlated,
+                                                0, 600, 40,
+                                                "highest correlated attributes")
+plt.show()
+plt.savefig(path + 'ridge_regression_outliers_comparison.png')
+print('best rmse: ', rmse, 'best alpha', alpha)
+
 # %% compare knn
 knn_regression_k_comparison(train_data_recent,
                             'shares',
                             highest_correlated,
-                            'highest ' + str(len(highest_correlated)) + ' correlated attributes with euclidean',
-                            k_to=50)
+                            'highest correlated attributes with outliers',
+                            k_to=60)
 
-knn_regression_k_comparison(train_data_recent,
+knn_regression_k_comparison(train_data_outliers,
                             'shares',
-                            self_chosen_attributes,
-                            'self chosen attributes',
-                            k_to=50)
+                            highest_correlated,
+                            'highest correlated attributes without outliers',
+                            k_to=60)
+plt.savefig(path + 'knn_outliers_comparision_euclidean.png')
 plt.show()
 
 # %%
@@ -216,6 +229,14 @@ decision_tree_comparison(train_data_recent,
                          p_from=1,
                          p_to=30,
                          p_step=2)
+decision_tree_comparison(train_data_outliers,
+                         'shares',
+                         [[highest_correlated, 'REC highest correlated with outliers removed']],
+                         comp_type='max_depth',
+                         p_from=1,
+                         p_to=30,
+                         p_step=2)
+plt.savefig(path + 'tree_comparision_comparision')
 plt.show()
 
 #%%
@@ -228,7 +249,7 @@ highest_correlated.append('shares')
 print(len(highest_correlated))
 
 #%%
-models = [(5, 7, 5)]
+models = [(11,22,11)]
 df = mlp_regression(train_data_recent, highest_correlated, 'shares', models, "logistic")
 df = pd.concat([df, mlp_regression(train_data_recent, highest_correlated, 'shares', models, "relu")])
 df = pd.concat([df, mlp_regression(train_data_recent, highest_correlated, 'shares', models, "tanh")])
@@ -238,3 +259,14 @@ sns.catplot(x='Layers', y='RMSE', hue='Activation',data = df, kind='bar')
 plt.savefig(path + "mlp_comparision_top_correlating_outlier.png")
 plt.show()
 
+#%%
+models = [(11,22,11)]
+
+df = mlp_regression(train_data_outliers, highest_correlated, 'shares', models, "logistic")
+df = pd.concat([df, mlp_regression(train_data_outliers, highest_correlated, 'shares', models, "relu")])
+df = pd.concat([df, mlp_regression(train_data_outliers, highest_correlated, 'shares', models, "tanh")])
+
+sns.catplot(x='Layers', y='RMSE', hue='Activation',data = df, kind='bar')
+
+plt.savefig(path + "mlp_comparision_top_correlating_outlier.png")
+plt.show()
