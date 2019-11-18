@@ -45,6 +45,23 @@
   \titlepage
 \end{frame}
 
+\begin{frame}{}
+\frametitle{Bike Sharing Performance Characteristics}
+\begin{minipage}{0.45\textwidth}
+\begin{itemize}
+\item No missing values
+\item Target value is amount of shared bikes [1,970]
+\item Nominal values e.g. holiday, workingday, wathersit
+\item Ordinal values e.g. season, weekday
+\item Interval values e.g. yr, mnth, temp, etc.
+\item Already normalized
+\end{itemize}
+\end{minipage}
+%\begin{minipage}{0.5\textwidth}
+%    \includegraphics[width=1.0\textwidth]{\plots }
+%\end{minipage}
+\end{frame}
+
 \begin{frame}
 \frametitle{Ridge Regression}
 \begin{itemize}
@@ -78,75 +95,97 @@
 \end{frame}
 
 \begin{frame}{}
-\frametitle{Student Performance important Attributes}
+\frametitle{Student Performance Comparing Father Job - Mother Job}
 % TODO add list and boxplot for Attributes
+\begin{minipage}{0.49\textwidth}
+	\center Father Job
+    \includegraphics[width=1.0\textwidth]{\plots student_performance/boxplot_father.png}
+\end{minipage}
+\begin{minipage}{0.49\textwidth}
+	\center Mother Job
+    \includegraphics[width=1.0\textwidth]{plots/student_performance/boxplot_mother.png}
+\end{minipage}
 \end{frame}
 
 \begin{frame}{}
 \frametitle{Student Performance Correlation}
 % TODO Heatmap
+\begin{minipage}{0.3\textwidth}
+\begin{itemize}
+\item Picked 7 highest correlated (> 0.1)
+\end{itemize}
+\end{minipage}
+\begin{minipage}{0.69\textwidth}
+    \includegraphics[width=1.0\textwidth]{plots/student_performance/heatmap_7_highest_numerical.png}
+\end{minipage}
 \end{frame}
 
 \begin{frame}{}
 \frametitle{Student Performance Preprocessing}
 % TODO
+\begin{minipage}{0.99\textwidth}
+\begin{itemize}
+\item Data partly pre-processed (traveltime hours amount to [1:4])
+\item One Hot Encoding
+\item Binary Encoding
+\item Normalization
+\end{itemize}
+\end{minipage}
+\end{frame}
+
+\begin{frame}{}
+\frametitle{Student Performance ridge regression}
+% TODO add list and boxplot for Attributes
+\begin{minipage}{0.49\textwidth}
+    \includegraphics[width=1.0\textwidth]{plots/student_performance/ridge_alpha_comparison.png}
+\end{minipage}
+\begin{minipage}{0.49\textwidth}
+    \includegraphics[width=1.0\textwidth]{plots/student_performance/ridge_alpha_comparison_normalized.png}
+\end{minipage}
 \end{frame}
 
 \begin{frame}{}
 \frametitle{Student Performance k nearest neighbour}
-\begin{minipage}{0.30\textwidth}
-\begin{itemize}
-\item  % TODO
-\end{itemize}
+\begin{minipage}{0.49\textwidth}
+    \includegraphics[width=1.0\textwidth]{plots/student_performance/knn_k_comparison.png}
 \end{minipage}
-\begin{minipage}{0.69\textwidth}
-    \includegraphics[width=1.0\textwidth]{\plots student_performance/knn_k_normalized_comparison.png}
+\begin{minipage}{0.49\textwidth}
+    \includegraphics[width=1.0\textwidth]{plots/student_performance/knn_k_normalized_comparison.png}
 \end{minipage}
 \end{frame}
-
-\begin{frame}{}
-\frametitle{Student Performance decision trees sample leaf comparison}
-\begin{minipage}{0.30\textwidth}
-\begin{itemize}
-\item  % TODO
-\end{itemize}
-\end{minipage}
-\begin{minipage}{0.69\textwidth}
-    \includegraphics[width=1.0\textwidth]{plots/student_performance/tree_min_samples_leaf_comparison.png}
-\end{minipage}
-\end{frame}
-
 
 \begin{frame}{}
 \frametitle{Student Performance normalized decision tree comparison}
-\begin{minipage}{0.30\textwidth}
+\begin{minipage}{0.3\textwidth}
 \begin{itemize}
-\item  % TODO
+\item  Gets worse with increasing depth
 \end{itemize}
 \end{minipage}
 \begin{minipage}{0.69\textwidth}
-    \includegraphics[width=1.0\textwidth]{plots/student_performance/tree_min_samples_leaf_comparison_normalized.png}
+    \includegraphics[width=1.0\textwidth]{plots/student_performance/tree_max_depth_comparison.png}
 \end{minipage}
 \end{frame}
-
-
 
 \begin{frame}{}
-\frametitle{Bike Sharing Performance Characteristics}
-\begin{minipage}{0.45\textwidth}
-\begin{itemize}
-\item No missing values
-\item Target value is amount of shared bikes [1,970]
-\item Nominal values e.g. holiday, workingday, wathersit
-\item Ordinal values e.g. season, weekday
-\item Interval values e.g. yr, mnth, temp, etc.
-\item Already normalized
-\end{itemize}
+\frametitle{Student Performance decision trees min sample leaf - split  comparison}
+\begin{minipage}{0.49\textwidth}
+    \includegraphics[width=1.0\textwidth]{plots/student_performance/tree_min_samples_leaf_comparison.png}
 \end{minipage}
-\begin{minipage}{0.5\textwidth}
-    \includegraphics[width=1.0\textwidth]{\plots }
+\begin{minipage}{0.49\textwidth}
+    \includegraphics[width=1.0\textwidth]{plots/student_performance/tree_min_samples_split_comparison.png}
 \end{minipage}
 \end{frame}
+
+\begin{frame}{}
+\frametitle{Student Performance MLP comparison}
+\begin{minipage}{0.49\textwidth}
+    \includegraphics[width=1.0\textwidth]{plots/student_performance/mlp_crossvalidation_layer_activation_function_comparison.png}
+\end{minipage}
+\begin{minipage}{0.49\textwidth}
+    \includegraphics[width=1.0\textwidth]{plots/student_performance/mlp_crossvalidation_layer_activation_function_comparison_normalized.png}
+\end{minipage}
+\end{frame}
+
 
 \begin{frame}{}
 \frametitle{Student Performance important Attributes}
