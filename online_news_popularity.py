@@ -90,8 +90,8 @@ plt.show()
 highest_correlated = highest_correlated_data_as_list(train_data_recent, 'shares', 10)
 correlation_matrix = train_data_recent[highest_correlated].corr().abs()
 sns.heatmap(correlation_matrix, square=True, linewidths=.5).get_figure()
-plt.show()
 plt.savefig(path + 'heatmap_highest_correlated.png')
+plt.show()
 
 '''
 #%%
@@ -108,8 +108,8 @@ print(len(train_data_recent))
 #%% plot own attributes
 correlation_matrix = train_data_recent[highest_correlated].corr().abs()
 sns.heatmap(correlation_matrix, square=True, linewidths=.5).get_figure()
-plt.show()
 plt.savefig(path + 'heatmap_self_chosen.png')
+plt.show()
 
 '''
 # %% plot shares with threshold <= threshold
@@ -148,8 +148,8 @@ rmse, alpha = ridge_regression_alpha_comparison(inlier,
                                                 0, 600, 25,
                                                 "self chosen attributes")
 '''
-plt.show()
 plt.savefig(path + 'ridge_regression_alpha_comparison.png')
+plt.show()
 print('best rmse: ', rmse, 'best alpha', alpha)
 
 # %% compare ridge regression
@@ -158,8 +158,8 @@ rmse, alpha = ridge_regression_alpha_comparison(train_data_outliers,
                                                 highest_correlated,
                                                 0, 600, 40,
                                                 "highest correlated attributes")
-plt.show()
 plt.savefig(path + 'ridge_regression_outliers_comparison.png')
+plt.show()
 print('best rmse: ', rmse, 'best alpha', alpha)
 
 # %% compare knn
@@ -177,21 +177,6 @@ knn_regression_k_comparison(train_data_outliers,
 plt.savefig(path + 'knn_outliers_comparision_euclidean.png')
 plt.show()
 
-# %%
-# knn_regression_k_comparison(inlier,
-#                             'shares',
-#                             highest_correlated,
-#                             'highest 30 correlated attributes with euclidean',
-#                             k_to=25)
-#
-# knn_regression_k_comparison(inlier,
-#                             'shares',
-#                             self_chosen_attributes,
-#                             '15 self chosen attributes',
-#                             k_to=25)
-#
-# plt.show()
-# plt.savefig(path + 'knn_k_comparison.png')
 
 #%% compare decision trees
 
@@ -256,7 +241,7 @@ df = pd.concat([df, mlp_regression(train_data_recent, highest_correlated, 'share
 
 sns.catplot(x='Layers', y='RMSE', hue='Activation',data = df, kind='bar')
 
-plt.savefig(path + "mlp_comparision_top_correlating_outlier.png")
+plt.savefig(path + "mlp_comparision_top_correlating_recent.png")
 plt.show()
 
 #%%

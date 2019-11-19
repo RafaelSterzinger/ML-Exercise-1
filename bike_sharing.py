@@ -213,14 +213,3 @@ sns.catplot(x='Layers', y='RMSE', hue='Activation',data = df, kind='bar')
 plt.savefig(path + "mlp_regression_transformed.png")
 plt.show()
 
-#%%
-
-from sklearn import neighbors
-x_train, y_train, x_test, y_test = make_split(train, 'cnt')
-
-find_best_rmse('with all attributes and minkowski',
-               x_train, y_train, x_test, y_test, metric="minkowski")
-
-plt.ylabel("Root Mean Squared Error")
-plt.savefig(path + "knn_all_attributes_transformed.png")
-plt.show()
